@@ -161,12 +161,87 @@ export async function deleteNote(req: AuthRequest, res: Response) {
 
     res.status(200).json({
       success: true,
-      message: "Note deleted",
+      message: "Note deleted successfully",
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: "Failed to delete note",
+      data: error,
+    });
+  }
+};
+
+export const getDeletedNotes = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.user.userID;
+
+    const notes = await prisma.note.findMany({
+      where: {
+        userId,
+        isDeleted: true,
+      },
+      orderBy: { updatedAt: 'desc' },
+    });
+
+    if (notes.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Note not found or has been deleted",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Deleted notes retrieved successfully",
+      data: notes,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      data: error,
+    });
+  }
+};
+
+export const restoreNote = async (req: AuthRequest, res: Response) => {
+  const userId = req.user.userID;
+  const { id } = req.params;
+
+  try {
+    const note = await prisma.note.findFirst({
+      where: {
+        id,
+        userId,
+        isDeleted: true,
+      },
+    });
+
+    if (!note) {
+      return res.status(404).json({
+        success: false,
+        message: "Note not found or not deleted",
+      });
+    }
+
+    const restoredNote = await prisma.note.update({
+      where: { id },
+      data: {
+        isDeleted: false,
+        updatedAt: new Date(),
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Note restored successfully",
+      data: restoredNote,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to restore note",
       data: error,
     });
   }

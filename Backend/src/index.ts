@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from 'dotenv'
 import authRoutes from "./routes/auth.route"
 import noteRouter from "./routes/note.route";
+import singleEntryRouter from "./routes/single.routes";
 dotenv.config()
 const app = express();
 
@@ -9,7 +10,8 @@ const app = express();
 app.use (express.json());
 
 app.use("/api/auth", authRoutes);
-app.use("/api/entry", noteRouter);
+app.use("/api/entries", noteRouter);
+app.use("/api/entry", singleEntryRouter);
 
 app.get ("/", (_req, res) => {
     res.send("Welcome to Notely Backend");

@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { prisma } from "../../config/prisma.conf";
 import { AuthRequest } from "../middleware/verifyToken";
 
@@ -89,6 +89,84 @@ export async function getNoteById(req: AuthRequest, res: Response) {
     res.status(500).json({
       success: false,
       message: "Failed to fetch note",
+      data: error,
+    });
+  }
+};
+
+export async function updateNote(req: AuthRequest, res: Response) {
+  const userId = req.user.userID;
+  const { id } = req.params;
+  const { title, synopsis, content } = req.body;
+
+  try {
+    const note = await prisma.note.findFirst({
+      where: { id, userId, isDeleted: false },
+    });
+
+    if (!note) {
+      return res.status(404).json({
+        success: false,
+        message: "Note not found or has been deleted",
+      });
+    }
+
+    const updatedNote = await prisma.note.update({
+      where: { id },
+      data: {
+        title,
+        synopsis,
+        content,
+        updatedAt: new Date(),
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Note updated successfully",
+      data: updatedNote,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to update note",
+      data: error,
+    });
+  }
+};
+
+export async function deleteNote(req: AuthRequest, res: Response) {
+  const userId = req.user.userID;
+  const { id } = req.params;
+
+  try {
+    const note = await prisma.note.findFirst({
+      where: { id, userId, isDeleted: false },
+    });
+
+    if (!note) {
+      return res.status(404).json({
+        success: false,
+        message: "Note not found or already deleted",
+      });
+    }
+
+    await prisma.note.update({
+      where: { id },
+      data: {
+        isDeleted: true,
+        updatedAt: new Date(),
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Note deleted (soft delete)",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to delete note",
       data: error,
     });
   }

@@ -9,7 +9,7 @@ const app = express();
 app.use (express.json());
 
 app.use("/api/auth", authRoutes);
-app.use("/api/notes", noteRouter);
+app.use("/api/entry", noteRouter);
 
 app.get ("/", (_req, res) => {
     res.send("Welcome to Notely Backend");

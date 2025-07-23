@@ -59,3 +59,37 @@ export const getNotes = async (req: AuthRequest, res: Response) => {
     });
   }
 };
+
+export async function getNoteById(req: AuthRequest, res: Response) {
+  const userId = req.user.userID;
+  const { id } = req.params;
+
+  try {
+    const note = await prisma.note.findFirst({
+      where: {
+        id,
+        userId,
+        isDeleted: false,
+      },
+    });
+
+    if (!note) {
+      return res.status(404).json({
+        success: false,
+        message: "Note not found or has been deleted",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Note retrieved successfully",
+      data: note,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch note",
+      data: error,
+    });
+  }
+};

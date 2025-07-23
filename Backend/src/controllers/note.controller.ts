@@ -161,7 +161,7 @@ export async function deleteNote(req: AuthRequest, res: Response) {
 
     res.status(200).json({
       success: true,
-      message: "Note deleted (soft delete)",
+      message: "Note deleted",
     });
   } catch (error) {
     res.status(500).json({

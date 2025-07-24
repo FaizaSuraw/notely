@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { prisma } from "../../config/prisma.conf";
 import { jwtSecretKey } from "../../config/jwt.conf";
+import { AuthRequest } from "../middleware/verifyToken";
 
 export async function register(req: Request, res: Response) {
   try {
@@ -129,4 +130,65 @@ export async function login(req: Request, res: Response) {
       data: error,
     });
   }
-}
+};
+
+export const logout = (_req: Request, res: Response) => {
+  res.status(200).json({
+    success: true,
+    message: "Logged out successfully",
+  });
+};
+
+export const updatePassword = async (req: AuthRequest, res: Response) => {
+  const userId = req.user.userID;
+  const { currentPassword, newPassword, confirmPassword } = req.body;
+
+  if (!currentPassword || !newPassword || !confirmPassword) {
+    return res.status(400).json({
+      success: false,
+      message: "All fields are required",
+    });
+  }
+
+  if (newPassword !== confirmPassword) {
+    return res.status(400).json({
+      success: false,
+      message: "New password and confirmation do not match",
+    });
+  }
+
+  try {
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: "Incorrect current password",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await prisma.user.update({
+      where: { id: userId },
+      data: { password: hashedPassword },
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Password updated successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Failed to update password",
+      data: error,
+    });
+  }
+};

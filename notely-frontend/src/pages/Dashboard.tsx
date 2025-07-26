@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useAuthStore } from "../store/authStore";
 import { useNavigate } from "react-router-dom";
 import NoteCard from "../components/NoteCard";
+import MainLayout from "../components/MainLayout";
 
 interface Note {
   id: string;
@@ -46,6 +47,7 @@ const Dashboard = () => {
   }, [token]);
 
   return (
+    <MainLayout>
     <Box sx={{ backgroundColor: "#f5f5f5", minHeight: "100vh", py: 4 }}>
       <Container>
         <Typography variant="h4" fontWeight="bold" mb={4}>
@@ -79,6 +81,7 @@ const Dashboard = () => {
         <AddIcon />
       </Fab>
     </Box>
+    </MainLayout>
   );
 };
 

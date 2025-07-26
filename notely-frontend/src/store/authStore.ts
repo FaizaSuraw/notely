@@ -4,7 +4,10 @@ interface AuthState {
   token: string | null;
   setToken: (token: string) => void;
   clearToken: () => void;
-  login: (id: string, password: string) => Promise<{ success: boolean; message: string }>;
+  login: (
+    id: string,
+    password: string,
+  ) => Promise<{ success: boolean; message: string }>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -36,7 +39,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         return { success: false, message: data.message || "Login failed" };
       }
 
-      localStorage.setItem("token", data.data); 
+      localStorage.setItem("token", data.data);
       set({ token: data.data });
 
       return { success: true, message: "Login successful" };

@@ -162,7 +162,11 @@ const Login = () => {
         autoHideDuration={3000}
         onClose={() => setSnackbar({ ...snackbar, open: false })}
       >
-        <MuiAlert severity={snackbar.severity as any} elevation={6} variant="filled">
+        <MuiAlert
+          severity={snackbar.severity as any}
+          elevation={6}
+          variant="filled"
+        >
           {snackbar.message}
         </MuiAlert>
       </Snackbar>

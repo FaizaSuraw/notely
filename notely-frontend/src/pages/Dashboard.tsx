@@ -10,6 +10,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "../store/authStore";
 import { useNavigate } from "react-router-dom";
+import NoteCard from "../components/NoteCard";
 
 interface Note {
   id: string;
@@ -58,30 +59,12 @@ const Dashboard = () => {
         ) : (
           <Grid container spacing={3}>
             {notes.map((note) => (
-              <Grid size = {{xs:12, md:6, lg:4}} key={note.id}>
-                <Box
-                  sx={{
-                    p: 3,
-                    borderRadius: 2,
-                    boxShadow: 2,
-                    backgroundColor: "#fff",
-                  }}
-                >
-                  <Typography variant="h6" fontWeight="bold">
-                    {note.title}
-                  </Typography>
-                  <Typography color="text.secondary" mt={1}>
-                    {note.synopsis}
-                  </Typography>
-                  <Typography
-                    variant="caption"
-                    color="text.disabled"
-                    mt={2}
-                    display="block"
-                  >
-                    {new Date(note.createdAt).toLocaleDateString()}
-                  </Typography>
-                </Box>
+              <Grid size={{ xs: 12, md: 6, lg: 4 }} key={note.id}>
+                <NoteCard
+                  title={note.title}
+                  synopsis={note.synopsis}
+                  createdAt={note.createdAt}
+                />
               </Grid>
             ))}
           </Grid>

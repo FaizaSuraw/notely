@@ -117,7 +117,7 @@ const Register = () => {
           </Typography>
 
           <Grid container spacing={2}>
-            <Grid size = {{xs:12, sm:6}}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
                 name="firstName"
                 label="First Name"
@@ -126,7 +126,7 @@ const Register = () => {
                 onChange={handleChange}
               />
             </Grid>
-            <Grid size = {{xs:12, sm:6}}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
                 name="lastName"
                 label="Last Name"
@@ -135,7 +135,7 @@ const Register = () => {
                 onChange={handleChange}
               />
             </Grid>
-            <Grid size = {{xs:12}}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 name="username"
                 label="Username"
@@ -144,7 +144,7 @@ const Register = () => {
                 onChange={handleChange}
               />
             </Grid>
-            <Grid size = {{xs:12}}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 name="email"
                 label="Email"
@@ -154,7 +154,7 @@ const Register = () => {
                 onChange={handleChange}
               />
             </Grid>
-            <Grid size = {{xs:12}}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 name="password"
                 label="Password"

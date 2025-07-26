@@ -1,6 +1,8 @@
 import { BrowserRouter } from "react-router-dom";
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import AppRouter from "./routes/AppRouter";
+import 'react-markdown-editor-lite/lib/index.css';
+
 
 const theme = createTheme({
   palette: {

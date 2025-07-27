@@ -7,13 +7,13 @@ import {
   useTheme,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
+import Footer from "../components/Footer";
 const Home = () => {
   const theme = useTheme();
   const navigate = useNavigate();
 
   return (
-    <Box
+    <><Box
       sx={{
         minHeight: "100vh",
         background: `linear-gradient(145deg, ${theme.palette.primary.light}, #f5f5f5)`,
@@ -54,13 +54,15 @@ const Home = () => {
             <img
               src="/assets/notes-illustration.svg"
               alt="Note Illustration"
-              style={{ width: "100%", maxWidth: "500px" }}
-            />
+              style={{ width: "100%", maxWidth: "500px" }} />
           </Box>
         </Stack>
       </Container>
     </Box>
+    <footer />
+    </>
   );
+  
 };
 
 export default Home;

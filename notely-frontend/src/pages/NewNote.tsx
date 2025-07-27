@@ -8,7 +8,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
 import MainLayout from "../components/MainLayout";
@@ -23,6 +23,9 @@ const NewNote = () => {
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "info" });
 
   const token = useAuthStore((state) => state.token);
+  useEffect(() => {
+  console.log("Token from authStore:", token);
+}, [token]);
   const navigate = useNavigate();
 
   const handleEditorChange = ({ text }: { html: string; text: string }) => {
@@ -36,6 +39,7 @@ const NewNote = () => {
 
     setLoading(true);
     try {
+      console.log("Token before POST:", token);
       const res = await fetch("http://localhost:5000/api/entries", {
         method: "POST",
         headers: {

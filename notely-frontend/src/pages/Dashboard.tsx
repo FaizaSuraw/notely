@@ -18,6 +18,7 @@ interface Note {
   title: string;
   synopsis: string;
   createdAt: string;
+  isDeleted: boolean;
 }
 
 const Dashboard = () => {
@@ -34,8 +35,12 @@ const Dashboard = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+
         const data = await res.json();
-        if (data.success) setNotes(data.data);
+        if (data.success) {
+          const visibleNotes = data.data.filter((n: Note) => !n.isDeleted);
+          setNotes(visibleNotes);
+        }
       } catch (err) {
         console.error("Failed to load notes", err);
       } finally {
@@ -48,39 +53,40 @@ const Dashboard = () => {
 
   return (
     <MainLayout>
-    <Box sx={{ backgroundColor: "#f5f5f5", minHeight: "100vh", py: 4 }}>
-      <Container>
-        <Typography variant="h4" fontWeight="bold" mb={4}>
-          📓 My Notes
-        </Typography>
+      <Box sx={{ backgroundColor: "#f5f5f5", minHeight: "100vh", py: 4 }}>
+        <Container>
+          <Typography variant="h4" fontWeight="bold" mb={4}>
+            📓 My Notes
+          </Typography>
 
-        {loading ? (
-          <CircularProgress />
-        ) : notes.length === 0 ? (
-          <Typography>No notes yet. Start writing your first one!</Typography>
-        ) : (
-          <Grid container spacing={3}>
-            {notes.map((note) => (
-              <Grid size={{ xs: 12, md: 6, lg: 4 }} key={note.id}>
-                <NoteCard
-                  title={note.title}
-                  synopsis={note.synopsis}
-                  createdAt={note.createdAt}
-                />
-              </Grid>
-            ))}
-          </Grid>
-        )}
-      </Container>
+          {loading ? (
+            <CircularProgress />
+          ) : notes.length === 0 ? (
+            <Typography>No notes yet. Start writing your first one!</Typography>
+          ) : (
+            <Grid container spacing={3}>
+              {notes.map((note) => (
+                <Grid size = {{xs:12, md:6, lg:4}} key={note.id}>
+                  <NoteCard
+                    id={note.id}
+                    title={note.title}
+                    synopsis={note.synopsis}
+                    createdAt={note.createdAt}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          )}
+        </Container>
 
-      <Fab
-        color="primary"
-        sx={{ position: "fixed", bottom: 32, right: 32 }}
-        onClick={() => navigate("/new")}
-      >
-        <AddIcon />
-      </Fab>
-    </Box>
+        <Fab
+          color="primary"
+          sx={{ position: "fixed", bottom: 32, right: 32 }}
+          onClick={() => navigate("/new")}
+        >
+          <AddIcon />
+        </Fab>
+      </Box>
     </MainLayout>
   );
 };

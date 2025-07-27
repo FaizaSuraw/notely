@@ -50,21 +50,16 @@ const Login = () => {
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") handleLogin();
-  };
-
   return (
     <Box
       sx={{
         minHeight: "100vh",
-        minWidth: "100vw",
+        minWidth:"100vw",
         background: `linear-gradient(to right, #e3f2fd, #ffffff)`,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         py: 4,
-        backgroundColor: "#f0f4f8", // fallback color
       }}
     >
       <Container maxWidth="sm">
@@ -85,22 +80,18 @@ const Login = () => {
               bgcolor: "primary.main",
               width: 56,
               height: 56,
-              mb: 1,
+              mb: 2,
               fontSize: 28,
             }}
           >
             📝
           </Avatar>
 
-          <Typography variant="h5" fontWeight="bold" mb={1}>
-            Notely
-          </Typography>
-
-          <Typography variant="h6" fontWeight="medium" mb={1}>
+          <Typography variant="h4" fontWeight="bold" mb={1}>
             Welcome Back
           </Typography>
 
-          <Typography variant="body2" color="text.secondary" mb={3}>
+          <Typography variant="body1" color="text.secondary" mb={3}>
             Log in to your Notely account
           </Typography>
 
@@ -109,9 +100,7 @@ const Login = () => {
             label="Email or Username"
             variant="outlined"
             value={id}
-            autoFocus
             onChange={(e) => setId(e.target.value)}
-            onKeyPress={handleKeyPress}
             margin="normal"
           />
 
@@ -122,7 +111,6 @@ const Login = () => {
             type={showPassword ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            onKeyPress={handleKeyPress}
             margin="normal"
             InputProps={{
               endAdornment: (
@@ -162,11 +150,7 @@ const Login = () => {
         autoHideDuration={3000}
         onClose={() => setSnackbar({ ...snackbar, open: false })}
       >
-        <MuiAlert
-          severity={snackbar.severity as any}
-          elevation={6}
-          variant="filled"
-        >
+        <MuiAlert severity={snackbar.severity as any} elevation={6} variant="filled">
           {snackbar.message}
         </MuiAlert>
       </Snackbar>

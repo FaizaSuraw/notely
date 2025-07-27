@@ -246,3 +246,34 @@ export const restoreNote = async (req: AuthRequest, res: Response) => {
     });
   }
 };
+
+export const permanentDeleteNote = async (req: AuthRequest, res: Response) => {
+  const userId = req.user.userID;
+  const { id } = req.params;
+
+  try {
+    const note = await prisma.note.findFirst({
+      where: { id, userId, isDeleted: true },
+    });
+
+    if (!note) {
+      return res.status(404).json({
+        success: false,
+        message: "Note not found or not in trash",
+      });
+    }
+
+    await prisma.note.delete({ where: { id } });
+
+    return res.status(200).json({
+      success: true,
+      message: "Note permanently deleted",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+      data: error,
+    });
+  }
+};

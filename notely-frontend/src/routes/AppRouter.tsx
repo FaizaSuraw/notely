@@ -6,6 +6,7 @@ import NewNote from "../pages/NewNote";
 import ViewNote from "../pages/ViewNote";
 import Home from "../pages/Home";
 import EditNoteForm from "../pages/EditNote";
+import TrashPage from "../pages/TrashPage";
 
 const AppRouter = () => {
   return (
@@ -17,6 +18,8 @@ const AppRouter = () => {
       <Route path="/new" element={<NewNote />} />
       <Route path="/note/:id" element={<ViewNote />} />
       <Route path="/edit/:id" element={<EditNoteForm />} />
+      <Route path="/trash" element={<TrashPage />} />
+
       
 
       {/* <Route path="/register" element={<Register />} />

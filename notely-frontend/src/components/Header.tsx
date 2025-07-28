@@ -1,77 +1,73 @@
 import {
   AppBar,
   Toolbar,
-  IconButton,
   Typography,
-  Avatar,
-  Box,
+  Button,
+  IconButton,
+  Stack,
 } from "@mui/material";
+import { useNavigate, Link } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Person } from "@mui/icons-material";
 
-const Header = ({
-  open,
-  drawerWidth,
-  toggleDrawer,
-}: {
-  open: boolean;
-  drawerWidth: number;
-  toggleDrawer: () => void;
-}) => {
+interface HeaderProps {
+  onLogout: () => void;
+}
+
+const Header = ({ onLogout }: HeaderProps) => {
+  const navigate = useNavigate();
+
   return (
     <AppBar
-      position="fixed"
+      position="static"
       elevation={0}
       sx={{
-        width: `calc(100% - ${open ? drawerWidth : 64}px)`,
-        ml: `${open ? drawerWidth : 64}px`,
-        transition: "width 0.3s ease, margin 0.3s ease",
-        bgcolor: "white",
-        borderBottom: "1px solid rgba(0,0,0,0.08)",
-        backdropFilter: "blur(10px)",
+        bgcolor: "#fff",
+        color: "text.primary",
+        borderBottom: "1px solid #eee",
       }}
     >
-      <Toolbar sx={{ justifyContent: "space-between" }}>
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <IconButton
-            onClick={toggleDrawer}
-            edge="start"
-            sx={{
-              mr: 2,
-              color: "grey.700",
-              "&:hover": {
-                bgcolor: "grey.100",
-              },
-            }}
-          >
+      <Toolbar sx={{ justifyContent: "space-between", px: { xs: 2, md: 4 } }}>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <IconButton size="small" edge="start" sx={{ display: { md: "none" } }}>
             <MenuIcon />
           </IconButton>
           <Typography
             variant="h6"
-            noWrap
+            component={Link}
+            to="/"
             sx={{
-              color: "grey.800",
+              textDecoration: "none",
               fontWeight: 700,
-              fontSize: "1.3rem",
+              color: "inherit",
+              fontSize: "1.2rem",
             }}
           >
             Notely
           </Typography>
-        </Box>
+        </Stack>
 
-        <Avatar
-          sx={{
-            width: 36,
-            height: 36,
-            bgcolor: "primary.main",
-            cursor: "pointer",
-            "&:hover": {
-              bgcolor: "primary.dark",
-            },
-          }}
-        >
-          <Person sx={{ fontSize: 20 }} />
-        </Avatar>
+        <Stack direction="row" spacing={1}>
+          <Button variant="text" color="inherit" onClick={() => navigate("/favorites")}>
+            Favorites
+          </Button>
+          <Button variant="text" color="inherit" onClick={() => navigate("/add")}>
+            Add Note
+          </Button>
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={onLogout}
+            sx={{
+              borderRadius: 3,
+              textTransform: "none",
+              fontWeight: 500,
+              borderColor: "#ddd",
+              "&:hover": { borderColor: "#aaa" },
+            }}
+          >
+            Logout
+          </Button>
+        </Stack>
       </Toolbar>
     </AppBar>
   );

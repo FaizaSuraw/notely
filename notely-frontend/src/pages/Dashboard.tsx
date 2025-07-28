@@ -51,7 +51,6 @@ const Dashboard = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-
         const data = await res.json();
         if (data.success) {
           const visibleNotes = data.data.filter((n: Note) => !n.isDeleted);
@@ -105,14 +104,14 @@ const Dashboard = () => {
   };
 
   const renderSkeletons = () => (
-    <Grid container spacing={3}>
+    <Grid container spacing={2}>
       {[...Array(6)].map((_, index) => (
         <Grid size = {{xs:12, md:6, lg:4}} key={index}>
-          <Card sx={{ p: 3, borderRadius: 3 }}>
-            <Skeleton variant="rectangular" height={4} sx={{ mb: 2 }} />
-            <Skeleton variant="text" height={32} sx={{ mb: 1 }} />
-            <Skeleton variant="text" height={20} sx={{ mb: 1 }} />
-            <Skeleton variant="text" height={20} sx={{ mb: 2 }} />
+          <Card sx={{ p: 2, borderRadius: 2 }}>
+            <Skeleton variant="rectangular" height={4} sx={{ mb: 1 }} />
+            <Skeleton variant="text" height={24} sx={{ mb: 1 }} />
+            <Skeleton variant="text" height={16} sx={{ mb: 1 }} />
+            <Skeleton variant="text" height={16} sx={{ mb: 2 }} />
             <Stack direction="row" justifyContent="space-between">
               <Skeleton variant="rectangular" width={80} height={24} />
               <Skeleton variant="circular" width={32} height={32} />
@@ -125,20 +124,20 @@ const Dashboard = () => {
 
   return (
     <MainLayout>
-      <Container maxWidth="xl" sx={{ py: 3 }}>
-        <Box sx={{ mb: 4 }}>
+      <Container maxWidth="md" sx={{ py: 3 }}>
+        <Box sx={{ mb: 3 }}>
           <Stack
             direction={{ xs: "column", sm: "row" }}
             justifyContent="space-between"
             alignItems={{ xs: "flex-start", sm: "center" }}
             spacing={2}
-            sx={{ mb: 3 }}
+            sx={{ mb: 2 }}
           >
             <Box>
-              <Typography variant="h4" fontWeight={700}>
+              <Typography variant="h5" fontWeight={700}>
                 📓 My Notes
               </Typography>
-              <Typography variant="body1" color="text.secondary">
+              <Typography variant="body2" color="text.secondary">
                 {loading
                   ? "Loading..."
                   : `${notes.length} notes in your workspace`}
@@ -150,8 +149,8 @@ const Dashboard = () => {
               startIcon={<AddIcon />}
               onClick={() => navigate("/new")}
               sx={{
-                px: 3,
-                py: 1.5,
+                px: 2,
+                py: 1,
                 borderRadius: 2,
                 fontWeight: 600,
               }}
@@ -160,7 +159,7 @@ const Dashboard = () => {
             </Button>
           </Stack>
 
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={2} mb={3}>
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={2} mb={2}>
             <Paper
               sx={{
                 p: 1,
@@ -197,45 +196,31 @@ const Dashboard = () => {
             </Stack>
           </Stack>
 
-          <Stack direction="row" spacing={2} flexWrap="wrap" mb={2}>
-            <Chip
-              label={`${notes.length} Total`}
-              color="primary"
-              variant="outlined"
-            />
-            <Chip
-              label={`${favoriteNotes.length} Favorites`}
-              color="warning"
-              variant="outlined"
-            />
-            <Chip
-              label={`${recentNotes.length} Recent`}
-              color="success"
-              variant="outlined"
-            />
+          <Stack direction="row" spacing={1} flexWrap="wrap" mb={2}>
+            <Chip label={`${notes.length} Total`} color="primary" variant="outlined" />
+            <Chip label={`${favoriteNotes.length} Favorites`} color="warning" variant="outlined" />
+            <Chip label={`${recentNotes.length} Recent`} color="success" variant="outlined" />
           </Stack>
         </Box>
 
         {loading ? (
           renderSkeletons()
         ) : filteredNotes.length === 0 ? (
-          <Card sx={{ p: 8, textAlign: "center", border: "2px dashed #ddd" }}>
-            <Typography variant="h5" sx={{ mb: 2 }}>
+          <Card sx={{ p: 6, textAlign: "center", border: "2px dashed #ddd" }}>
+            <Typography variant="h6" sx={{ mb: 2 }}>
               {searchQuery ? "No notes found" : "No notes yet"}
             </Typography>
-            <Typography variant="body1" sx={{ mb: 4 }}>
+            <Typography variant="body2" sx={{ mb: 3 }}>
               {searchQuery
                 ? "Try a different search."
                 : "Start writing your first note now!"}
             </Typography>
             <Button variant="contained" onClick={() => navigate("/new")}>
-              {searchQuery
-                ? `Create "${searchQuery}"`
-                : "Create First Note"}
+              {searchQuery ? `Create "${searchQuery}"` : "Create First Note"}
             </Button>
           </Card>
         ) : (
-          <Grid container spacing={3}>
+          <Grid container spacing={2}>
             {filteredNotes.map((note) => (
               <Grid size = {{xs:12, sm:6, lg:4}} key={note.id}>
                 <NoteCard

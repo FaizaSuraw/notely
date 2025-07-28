@@ -4,7 +4,7 @@ import Header from "./Header";
 import Sidebar from "./Sidebar";
 import { useState } from "react";
 
-const drawerWidth = 280;
+const drawerWidth = 100;
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const [open, setOpen] = useState(true);

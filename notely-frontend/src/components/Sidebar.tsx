@@ -36,42 +36,19 @@ const Sidebar = ({ open, drawerWidth }: SidebarProps) => {
   const clearToken = useAuthStore((state) => state.clearToken);
 
   const menuItems = [
-      {
-    text: "Home",
-    icon: <Home />,
-    route: "/",
-  },
-  {
-    text: "Dashboard",
-    icon: <Dashboard />,
-    route: "/dashboard",
-  },
-
-  {
-    text: "Favorites",
-    icon: <Star />,
-    route: "/favorites",
-  },
-  {
-    text: "Folders",
-    icon: <Folder />,
-    route: "/folders",
-  },
-  {
-    text: "Trash",
-    icon: <Delete />,
-    route: "/trash",
-  },
-];
+    { text: "Home", icon: <Home />, route: "/" },
+    { text: "Dashboard", icon: <Dashboard />, route: "/dashboard" },
+    { text: "Favorites", icon: <Star />, route: "/favorites" },
+    { text: "Folders", icon: <Folder />, route: "/folders" },
+    { text: "Trash", icon: <Delete />, route: "/trash" },
+  ];
 
   const handleLogout = () => {
     clearToken();
     navigate("/login");
   };
 
-  const handleNavigation = (route: string) => {
-    navigate(route);
-  };
+  const handleNavigation = (route: string) => navigate(route);
 
   return (
     <Drawer
@@ -84,9 +61,8 @@ const Sidebar = ({ open, drawerWidth }: SidebarProps) => {
           boxSizing: "border-box",
           transition: "width 0.3s ease",
           bgcolor: "white",
-          borderRight: "1px solid rgba(0,0,0,0.08)",
           overflow: "hidden",
-          boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
+          borderRight: "1px solid rgba(0,0,0,0.08)",
         },
       }}
     >
@@ -99,13 +75,13 @@ const Sidebar = ({ open, drawerWidth }: SidebarProps) => {
         }}
       >
         {open && (
-          <Box sx={{ p: 2, mb: 2 }}>
+          <Box sx={{ p: 1.5, mb: 2 }}>
             <Stack
               direction="row"
-              spacing={2}
+              spacing={1.5}
               alignItems="center"
               sx={{
-                p: 2,
+                p: 1.5,
                 bgcolor: "grey.50",
                 borderRadius: 2,
                 mb: 2,
@@ -113,21 +89,16 @@ const Sidebar = ({ open, drawerWidth }: SidebarProps) => {
             >
               <Avatar
                 sx={{
-                  width: 40,
-                  height: 40,
+                  width: 32,
+                  height: 32,
                   bgcolor: "primary.main",
-                  fontSize: "1.2rem",
+                  fontSize: "1rem",
                 }}
               >
                 <Person />
               </Avatar>
-              <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Typography
-                  variant="subtitle2"
-                  fontWeight={600}
-                  color="grey.800"
-                  noWrap
-                >
+              <Box sx={{ minWidth: 0 }}>
+                <Typography variant="subtitle2" noWrap fontSize="0.85rem">
                   John Doe
                 </Typography>
                 <Typography variant="caption" color="text.secondary" noWrap>
@@ -136,28 +107,22 @@ const Sidebar = ({ open, drawerWidth }: SidebarProps) => {
               </Box>
             </Stack>
 
-            <Box sx={{ mb: 2 }}>
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: 700,
-                  color: "grey.800",
-                  mb: 0.5,
-                  fontSize: "1.1rem",
-                }}
-              >
+            <Box>
+              <Typography variant="body1" fontWeight={600} fontSize="0.9rem">
                 Workspace
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="caption" color="text.secondary">
                 Organize your thoughts
               </Typography>
             </Box>
           </Box>
         )}
-        <Box sx={{ flex: 1, px: open ? 2 : 1 }}>
-          <List sx={{ px: 0 }}>
+
+        <Box sx={{ flex: 1, px: open ? 1 : 0.5 }}>
+          <List disablePadding>
             {menuItems.map((item) => {
               const isActive = location.pathname === item.route;
+
               return (
                 <Tooltip
                   key={item.text}
@@ -169,15 +134,14 @@ const Sidebar = ({ open, drawerWidth }: SidebarProps) => {
                     <ListItemButton
                       onClick={() => handleNavigation(item.route)}
                       sx={{
-                        minHeight: 48,
+                        minHeight: 44,
                         justifyContent: open ? "initial" : "center",
-                        px: 2.5,
+                        px: 1.5,
                         borderRadius: 2,
                         bgcolor: isActive ? "primary.main" : "transparent",
-                        color: isActive ? "white" : "grey.700",
+                        color: isActive ? "white" : "grey.800",
                         "&:hover": {
                           bgcolor: isActive ? "primary.dark" : "grey.100",
-                          transform: "translateX(4px)",
                         },
                         transition: "all 0.2s ease",
                       }}
@@ -185,7 +149,7 @@ const Sidebar = ({ open, drawerWidth }: SidebarProps) => {
                       <ListItemIcon
                         sx={{
                           minWidth: 0,
-                          mr: open ? 2 : "auto",
+                          mr: open ? 1.5 : "auto",
                           justifyContent: "center",
                           color: "inherit",
                         }}
@@ -193,25 +157,15 @@ const Sidebar = ({ open, drawerWidth }: SidebarProps) => {
                         {item.icon}
                       </ListItemIcon>
                       {open && (
-                        <Box
+                        <ListItemText
+                          primary={item.text}
                           sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            width: "100%",
-                            justifyContent: "space-between",
+                            "& .MuiListItemText-primary": {
+                              fontSize: "0.85rem",
+                              fontWeight: isActive ? 600 : 500,
+                            },
                           }}
-                        >
-                          <ListItemText
-                            primary={item.text}
-                            sx={{
-                              "& .MuiListItemText-primary": {
-                                fontWeight: isActive ? 600 : 500,
-                                fontSize: "0.95rem",
-                              },
-                            }}
-                          />
-                         
-                        </Box>
+                        />
                       )}
                     </ListItemButton>
                   </ListItem>
@@ -221,31 +175,28 @@ const Sidebar = ({ open, drawerWidth }: SidebarProps) => {
           </List>
         </Box>
 
-        {/* Settings and Logout */}
-        <Box sx={{ p: open ? 2 : 1, mt: "auto" }}>
-          <Divider sx={{ mb: 2 }} />
-          <List sx={{ px: 0 }}>
+        <Box sx={{ p: open ? 1.5 : 1, mt: "auto" }}>
+          <Divider sx={{ mb: 1.5 }} />
+          <List disablePadding>
             <Tooltip title={open ? "" : "Settings"} placement="right" arrow>
-              <ListItem disablePadding sx={{ mb: 0.5 }}>
+              <ListItem disablePadding>
                 <ListItemButton
                   onClick={() => handleNavigation("/settings")}
                   sx={{
-                    minHeight: 48,
+                    minHeight: 44,
                     justifyContent: open ? "initial" : "center",
-                    px: 2.5,
+                    px: 1.5,
                     borderRadius: 2,
                     color: "grey.700",
                     "&:hover": {
                       bgcolor: "grey.100",
-                      transform: "translateX(4px)",
                     },
-                    transition: "all 0.2s ease",
                   }}
                 >
                   <ListItemIcon
                     sx={{
                       minWidth: 0,
-                      mr: open ? 2 : "auto",
+                      mr: open ? 1.5 : "auto",
                       justifyContent: "center",
                       color: "inherit",
                     }}
@@ -257,8 +208,8 @@ const Sidebar = ({ open, drawerWidth }: SidebarProps) => {
                       primary="Settings"
                       sx={{
                         "& .MuiListItemText-primary": {
+                          fontSize: "0.85rem",
                           fontWeight: 500,
-                          fontSize: "0.95rem",
                         },
                       }}
                     />
@@ -272,22 +223,20 @@ const Sidebar = ({ open, drawerWidth }: SidebarProps) => {
                 <ListItemButton
                   onClick={handleLogout}
                   sx={{
-                    minHeight: 48,
+                    minHeight: 44,
                     justifyContent: open ? "initial" : "center",
-                    px: 2.5,
+                    px: 1.5,
                     borderRadius: 2,
                     color: "error.main",
                     "&:hover": {
                       bgcolor: "error.50",
-                      transform: "translateX(4px)",
                     },
-                    transition: "all 0.2s ease",
                   }}
                 >
                   <ListItemIcon
                     sx={{
                       minWidth: 0,
-                      mr: open ? 2 : "auto",
+                      mr: open ? 1.5 : "auto",
                       justifyContent: "center",
                       color: "inherit",
                     }}
@@ -299,8 +248,8 @@ const Sidebar = ({ open, drawerWidth }: SidebarProps) => {
                       primary="Logout"
                       sx={{
                         "& .MuiListItemText-primary": {
+                          fontSize: "0.85rem",
                           fontWeight: 500,
-                          fontSize: "0.95rem",
                         },
                       }}
                     />

@@ -47,8 +47,11 @@ const Dashboard = () => {
     const fetchNotes = async () => {
       try {
         const res = await fetch("http://localhost:5000/api/entries", {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
+
         const data = await res.json();
         if (data.success) {
           const visibleNotes = data.data.filter((n: Note) => !n.isDeleted);
@@ -60,12 +63,14 @@ const Dashboard = () => {
         setLoading(false);
       }
     };
+
     fetchNotes();
   }, [token]);
 
-  const filteredNotes = notes.filter((note) =>
-    note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    note.synopsis.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredNotes = notes.filter(
+    (note) =>
+      note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      note.synopsis.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const favoriteNotes = filteredNotes.filter((note) => note.isFavorite);
@@ -83,10 +88,15 @@ const Dashboard = () => {
     try {
       const res = await fetch(`http://localhost:5000/api/entry/${id}`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
+
       const data = await res.json();
-      if (!res.ok || !data.success) throw new Error(data.message || "Delete failed");
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || "Delete failed");
+      }
       setNotes((prev) => prev.filter((note) => note.id !== id));
     } catch (error) {
       console.error("Failed to delete note:", error);
@@ -95,17 +105,17 @@ const Dashboard = () => {
   };
 
   const renderSkeletons = () => (
-    <Grid container spacing={2}>
+    <Grid container spacing={3}>
       {[...Array(6)].map((_, index) => (
-        <Grid size = {{xs:12, sm:6, md:4}} key={index}>
-          <Card sx={{ p: 2, borderRadius: 2 }}>
-            <Skeleton variant="rectangular" height={4} sx={{ mb: 1 }} />
-            <Skeleton variant="text" height={24} sx={{ mb: 1 }} />
-            <Skeleton variant="text" height={16} sx={{ mb: 1 }} />
-            <Skeleton variant="text" height={16} sx={{ mb: 1 }} />
+        <Grid size = {{xs:12, md:6, lg:4}} key={index}>
+          <Card sx={{ p: 3, borderRadius: 3 }}>
+            <Skeleton variant="rectangular" height={4} sx={{ mb: 2 }} />
+            <Skeleton variant="text" height={32} sx={{ mb: 1 }} />
+            <Skeleton variant="text" height={20} sx={{ mb: 1 }} />
+            <Skeleton variant="text" height={20} sx={{ mb: 2 }} />
             <Stack direction="row" justifyContent="space-between">
-              <Skeleton variant="rectangular" width={60} height={20} />
-              <Skeleton variant="circular" width={28} height={28} />
+              <Skeleton variant="rectangular" width={80} height={24} />
+              <Skeleton variant="circular" width={32} height={32} />
             </Stack>
           </Card>
         </Grid>
@@ -115,49 +125,119 @@ const Dashboard = () => {
 
   return (
     <MainLayout>
-      <Container maxWidth="xl" sx={{ py: 2 }}>
-        <Box sx={{ mb: 3 }}>
-          <Stack direction={{ xs: "column", sm: "row" }} justifyContent="space-between" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+      <Container maxWidth="xl" sx={{ py: 3 }}>
+        <Box sx={{ mb: 4 }}>
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            justifyContent="space-between"
+            alignItems={{ xs: "flex-start", sm: "center" }}
+            spacing={2}
+            sx={{ mb: 3 }}
+          >
             <Box>
-              <Typography variant="h5" fontWeight={700}>📓 My Notes</Typography>
-              <Typography variant="body2" color="text.secondary">
-                {loading ? "Loading..." : `${notes.length} notes in your workspace`}
+              <Typography variant="h4" fontWeight={700}>
+                📓 My Notes
+              </Typography>
+              <Typography variant="body1" color="text.secondary">
+                {loading
+                  ? "Loading..."
+                  : `${notes.length} notes in your workspace`}
               </Typography>
             </Box>
-            <Button variant="contained" startIcon={<AddIcon />} onClick={() => navigate("/new")} sx={{ px: 2, py: 1, borderRadius: 2, fontWeight: 600 }}>New Note</Button>
+
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={() => navigate("/new")}
+              sx={{
+                px: 3,
+                py: 1.5,
+                borderRadius: 2,
+                fontWeight: 600,
+              }}
+            >
+              New Note
+            </Button>
           </Stack>
 
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={1} mb={2}>
-            <Paper sx={{ p: 0.5, display: "flex", alignItems: "center", flex: 1, maxWidth: 400, borderRadius: 2 }}>
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={2} mb={3}>
+            <Paper
+              sx={{
+                p: 1,
+                display: "flex",
+                alignItems: "center",
+                flex: 1,
+                maxWidth: { xs: "100%", sm: 400 },
+                borderRadius: 2,
+              }}
+            >
               <Search sx={{ color: "grey.500", mr: 1 }} />
-              <InputBase placeholder="Search notes..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} sx={{ flex: 1, fontSize: "0.875rem" }} />
+              <InputBase
+                placeholder="Search notes..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                sx={{ flex: 1 }}
+              />
             </Paper>
+
             <Stack direction="row" spacing={1}>
-              <IconButton><FilterList fontSize="small" /></IconButton>
-              <IconButton><Sort fontSize="small" /></IconButton>
-              <IconButton onClick={() => setViewMode(viewMode === "grid" ? "list" : "grid")}>
-                {viewMode === "grid" ? <ViewList fontSize="small" /> : <ViewModule fontSize="small" />}
+              <IconButton>
+                <FilterList />
+              </IconButton>
+              <IconButton>
+                <Sort />
+              </IconButton>
+              <IconButton
+                onClick={() =>
+                  setViewMode(viewMode === "grid" ? "list" : "grid")
+                }
+              >
+                {viewMode === "grid" ? <ViewList /> : <ViewModule />}
               </IconButton>
             </Stack>
           </Stack>
 
-          <Stack direction="row" spacing={1} flexWrap="wrap" mb={2}>
-            <Chip label={`${notes.length} Total`} color="primary" size="small" variant="outlined" />
-            <Chip label={`${favoriteNotes.length} Favorites`} color="warning" size="small" variant="outlined" />
-            <Chip label={`${recentNotes.length} Recent`} color="success" size="small" variant="outlined" />
+          <Stack direction="row" spacing={2} flexWrap="wrap" mb={2}>
+            <Chip
+              label={`${notes.length} Total`}
+              color="primary"
+              variant="outlined"
+            />
+            <Chip
+              label={`${favoriteNotes.length} Favorites`}
+              color="warning"
+              variant="outlined"
+            />
+            <Chip
+              label={`${recentNotes.length} Recent`}
+              color="success"
+              variant="outlined"
+            />
           </Stack>
         </Box>
 
-        {loading ? renderSkeletons() : filteredNotes.length === 0 ? (
-          <Card sx={{ p: 4, textAlign: "center", border: "2px dashed #ddd" }}>
-            <Typography variant="h6" sx={{ mb: 1 }}>{searchQuery ? "No notes found" : "No notes yet"}</Typography>
-            <Typography variant="body2" sx={{ mb: 2 }}>{searchQuery ? "Try a different search." : "Start writing your first note now!"}</Typography>
-            <Button variant="contained" onClick={() => navigate("/new")}>{searchQuery ? `Create "${searchQuery}"` : "Create First Note"}</Button>
+        {loading ? (
+          renderSkeletons()
+        ) : filteredNotes.length === 0 ? (
+          <Card sx={{ p: 8, textAlign: "center", border: "2px dashed #ddd" }}>
+            <Typography variant="h5" sx={{ mb: 2 }}>
+              {searchQuery ? "No notes found" : "No notes yet"}
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 4 }}>
+              {searchQuery
+                ? "Try a different search."
+                : "Start writing your first note now!"}
+            </Typography>
+            <Button variant="contained" onClick={() => navigate("/new")}>
+              {searchQuery
+                ? `Create "${searchQuery}"`
+                : "Create First Note"}
+            </Button>
           </Card>
         ) : (
-          <Grid container spacing={2}>
+          <Grid container spacing={3}>
             {filteredNotes.map((note) => (
-              <Grid size = {{xs:12, sm:6, md:4}} key={note.id}>
+              <Grid size = {{xs:12, sm:6, lg:4}} key={note.id}>
                 <NoteCard
                   id={note.id}
                   title={note.title}

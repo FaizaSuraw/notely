@@ -22,8 +22,8 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
-          mt: 8,
+          p: 1,
+          mt: 6,
           transition: "margin 0.3s ease",
           ml: open ? `${drawerWidth}px` : "64px",
         }}

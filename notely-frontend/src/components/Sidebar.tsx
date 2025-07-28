@@ -81,11 +81,16 @@ const Sidebar = ({ open, drawerWidth }: SidebarProps) => {
               direction="row"
               spacing={1.5}
               alignItems="center"
+              onClick={() => navigate("/profile")}
               sx={{
                 p: 1.5,
                 bgcolor: "grey.50",
                 borderRadius: 2,
+                cursor: "pointer",
                 mb: 2,
+                "&:hover": {
+                  bgcolor: "grey.100",
+                },
               }}
             >
               <Avatar

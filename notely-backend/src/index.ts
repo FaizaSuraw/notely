@@ -12,10 +12,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: [
-    "http://localhost:5173",
-    "https://notely-vv5e.vercel.app",
-  ],
+    origin: "https://notely-vv5e.vercel.app",
     credentials: true,
   })
 );

@@ -1,29 +1,16 @@
 import type React from "react";
 
 import { Box } from "@mui/material";
-import Header from "./Header";
 import Sidebar from "./Sidebar";
 import { useState } from "react";
 
 const drawerWidth = 280;
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
-  const [open, setOpen] = useState(true);
-  const toggleDrawer = () => setOpen((prev) => !prev);
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    window.location.href = "/login";
-  };
+  const [open] = useState(true);
 
   return (
     <Box sx={{ display: "flex", bgcolor: "#fafafa", minHeight: "100vh" }}>
-      <Header
-        open={open}
-        drawerWidth={drawerWidth}
-        toggleDrawer={toggleDrawer}
-        onLogout={handleLogout}
-      />
       <Sidebar open={open} drawerWidth={drawerWidth} />
       <Box
         component="main"

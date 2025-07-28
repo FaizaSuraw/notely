@@ -11,7 +11,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 
 interface HeaderProps {
   onLogout: () => void;
+  open: boolean;
+  drawerWidth: number;
+  toggleDrawer: () => void;
 }
+
 
 const Header = ({ onLogout }: HeaderProps) => {
   const navigate = useNavigate();

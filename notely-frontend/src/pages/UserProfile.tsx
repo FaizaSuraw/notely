@@ -90,7 +90,7 @@ const UserProfile = () => {
       });
 
       const data = await res.json();
-
+      console.log("PROFILE RESPONSE", data);
       if (!data.success) {
         throw new Error(data.message || "Failed to fetch profile");
       }

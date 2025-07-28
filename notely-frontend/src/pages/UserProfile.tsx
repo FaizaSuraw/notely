@@ -83,7 +83,7 @@ const UserProfile = () => {
   const fetchProfile = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${api}/api/user/profile`, {
+      const res = await fetch(`${api}/api/user`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

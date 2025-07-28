@@ -1,5 +1,5 @@
-import type React from "react"
-import { useState, useEffect } from "react"
+import type React from "react";
+import { useState, useEffect } from "react";
 import {
   TextField,
   Button,
@@ -13,26 +13,33 @@ import {
   Divider,
   Alert,
   Skeleton,
-} from "@mui/material"
-import { ArrowBack, Save, Preview, Delete, Star, StarBorder } from "@mui/icons-material"
-import { useParams, useNavigate } from "react-router-dom"
-import { useAuthStore } from "../store/authStore"
-import MainLayout from "../components/MainLayout"
+} from "@mui/material";
+import {
+  ArrowBack,
+  Save,
+  Preview,
+  Delete,
+  Star,
+  StarBorder,
+} from "@mui/icons-material";
+import { useParams, useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/authStore";
+import MainLayout from "../components/MainLayout";
 
 interface Note {
-  id: string
-  title: string
-  synopsis: string
-  content: string
-  createdAt: string
-  updatedAt: string
-  isFavorite?: boolean
+  id: string;
+  title: string;
+  synopsis: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  isFavorite?: boolean;
 }
 
 const EditNote = () => {
-  const { id } = useParams()
-  const navigate = useNavigate()
-  const token = useAuthStore((state) => state.token)
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const token = useAuthStore((state) => state.token);
 
   const [note, setNote] = useState<Note>({
     id: "",
@@ -42,12 +49,12 @@ const EditNote = () => {
     createdAt: "",
     updatedAt: "",
     isFavorite: false,
-  })
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
-  const [lastSaved, setLastSaved] = useState<Date | null>(null)
-  const [error, setError] = useState("")
-  const [success, setSuccess] = useState("")
+  });
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   useEffect(() => {
     const fetchNote = async () => {
@@ -56,42 +63,42 @@ const EditNote = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        })
-        const data = await res.json()
+        });
+        const data = await res.json();
 
         if (data.success) {
-          setNote(data.data)
+          setNote(data.data);
         } else {
-          setError("Failed to load note")
+          setError("Failed to load note");
         }
       } catch (err) {
-        setError("Failed to load note")
-        console.error(err)
+        setError("Failed to load note");
+        console.error(err);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
     if (id && token) {
-      fetchNote()
+      fetchNote();
     }
-  }, [id, token])
+  }, [id, token]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNote({ ...note, [e.target.name]: e.target.value })
-    if (error) setError("")
-  }
+    setNote({ ...note, [e.target.name]: e.target.value });
+    if (error) setError("");
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!note.title.trim() || !note.synopsis.trim() || !note.content.trim()) {
-      setError("All fields are required")
-      return
+      setError("All fields are required");
+      return;
     }
 
-    setSaving(true)
-    setError("")
+    setSaving(true);
+    setError("");
 
     try {
       const res = await fetch(`http://localhost:5000/api/entry/${id}`, {
@@ -105,30 +112,30 @@ const EditNote = () => {
           synopsis: note.synopsis.trim(),
           content: note.content.trim(),
         }),
-      })
+      });
 
-      const data = await res.json()
+      const data = await res.json();
 
       if (data.success) {
-        setLastSaved(new Date())
-        setSuccess("Note saved successfully!")
-        setTimeout(() =>{
-           navigate(`/note/${id}`); 
+        setLastSaved(new Date());
+        setSuccess("Note saved successfully!");
+        setTimeout(() => {
+          navigate(`/note/${id}`);
         }, 1000);
       } else {
-        setError(data.message || "Failed to save note")
+        setError(data.message || "Failed to save note");
       }
     } catch (err) {
-      setError("Failed to save note")
-      console.error(err)
+      setError("Failed to save note");
+      console.error(err);
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
-  }
+  };
 
   const handleFavoriteToggle = () => {
-    setNote({ ...note, isFavorite: !note.isFavorite })
-  }
+    setNote({ ...note, isFavorite: !note.isFavorite });
+  };
 
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this note?")) {
@@ -138,42 +145,60 @@ const EditNote = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        })
+        });
 
         if (res.ok) {
-          navigate("/dashboard")
+          navigate("/dashboard");
         }
       } catch (err) {
-        setError("Failed to delete note")
+        setError("Failed to delete note");
       }
     }
-  }
+  };
 
   if (loading) {
     return (
       <MainLayout>
         <Container maxWidth="lg" sx={{ py: 3 }}>
           <Stack spacing={3}>
-            <Skeleton variant="rectangular" height={60} sx={{ borderRadius: 2 }} />
+            <Skeleton
+              variant="rectangular"
+              height={60}
+              sx={{ borderRadius: 2 }}
+            />
             <Stack direction={{ xs: "column", lg: "row" }} spacing={3}>
               <Box sx={{ flex: 1 }}>
-                <Skeleton variant="rectangular" height={400} sx={{ borderRadius: 2 }} />
+                <Skeleton
+                  variant="rectangular"
+                  height={400}
+                  sx={{ borderRadius: 2 }}
+                />
               </Box>
               <Box sx={{ width: { xs: "100%", lg: 300 } }}>
-                <Skeleton variant="rectangular" height={200} sx={{ borderRadius: 2 }} />
+                <Skeleton
+                  variant="rectangular"
+                  height={200}
+                  sx={{ borderRadius: 2 }}
+                />
               </Box>
             </Stack>
           </Stack>
         </Container>
       </MainLayout>
-    )
+    );
   }
 
   return (
     <MainLayout>
       <Container maxWidth="lg" sx={{ py: 3 }}>
         <Box sx={{ mb: 4 }}>
-          <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={2} sx={{ mb: 2 }}>
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+            spacing={2}
+            sx={{ mb: 2 }}
+          >
             <Stack direction="row" alignItems="center" spacing={2}>
               <IconButton
                 onClick={() => navigate(-1)}
@@ -293,7 +318,12 @@ const EditNote = () => {
                   }}
                   helperText="Supports Markdown formatting"
                 />
-                <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center">
+                <Stack
+                  direction="row"
+                  spacing={2}
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
                   <Button
                     variant="outlined"
                     color="error"
@@ -355,16 +385,26 @@ const EditNote = () => {
 
               <Stack spacing={3}>
                 <Box>
-                  <Typography variant="caption" color="text.secondary" fontWeight={600}>
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    fontWeight={600}
+                  >
                     Created
                   </Typography>
                   <Typography variant="body2">
-                    {note.createdAt ? new Date(note.createdAt).toLocaleString() : "Unknown"}
+                    {note.createdAt
+                      ? new Date(note.createdAt).toLocaleString()
+                      : "Unknown"}
                   </Typography>
                 </Box>
 
                 <Box>
-                  <Typography variant="caption" color="text.secondary" fontWeight={600}>
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    fontWeight={600}
+                  >
                     Last Modified
                   </Typography>
                   <Typography variant="body2">
@@ -377,25 +417,44 @@ const EditNote = () => {
                 </Box>
 
                 <Box>
-                  <Typography variant="caption" color="text.secondary" fontWeight={600}>
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    fontWeight={600}
+                  >
                     Word Count
                   </Typography>
                   <Typography variant="body2">
-                    {note.content.split(/\s+/).filter((word) => word.length > 0).length} words
+                    {
+                      note.content
+                        .split(/\s+/)
+                        .filter((word) => word.length > 0).length
+                    }{" "}
+                    words
                   </Typography>
                 </Box>
 
                 <Box>
-                  <Typography variant="caption" color="text.secondary" fontWeight={600}>
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    fontWeight={600}
+                  >
                     Character Count
                   </Typography>
-                  <Typography variant="body2">{note.content.length} characters</Typography>
+                  <Typography variant="body2">
+                    {note.content.length} characters
+                  </Typography>
                 </Box>
 
                 <Divider />
 
                 <Box>
-                  <Typography variant="caption" color="text.secondary" fontWeight={600}>
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    fontWeight={600}
+                  >
                     Status
                   </Typography>
                   <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
@@ -413,7 +472,7 @@ const EditNote = () => {
         </form>
       </Container>
     </MainLayout>
-  )
-}
+  );
+};
 
-export default EditNote
+export default EditNote;

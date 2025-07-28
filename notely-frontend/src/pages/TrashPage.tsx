@@ -15,62 +15,67 @@ import {
   DialogActions,
   Skeleton,
   Grid,
-} from "@mui/material"
-import { RestoreFromTrash, DeleteForever, ArrowBack, Warning } from "@mui/icons-material"
-import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { useAuthStore } from "../store/authStore"
-import MainLayout from "../components/MainLayout"
+} from "@mui/material";
+import {
+  RestoreFromTrash,
+  DeleteForever,
+  ArrowBack,
+  Warning,
+} from "@mui/icons-material";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/authStore";
+import MainLayout from "../components/MainLayout";
 
 interface Note {
-  id: string
-  title: string
-  synopsis: string
-  createdAt: string
-  updatedAt: string
-  isDeleted: boolean
+  id: string;
+  title: string;
+  synopsis: string;
+  createdAt: string;
+  updatedAt: string;
+  isDeleted: boolean;
 }
 
 const TrashPage = () => {
-  const [trashedNotes, setTrashedNotes] = useState<Note[]>([])
-  const [loading, setLoading] = useState(true)
+  const [trashedNotes, setTrashedNotes] = useState<Note[]>([]);
+  const [loading, setLoading] = useState(true);
   const [deleteDialog, setDeleteDialog] = useState<{
-    open: boolean
-    noteId: string
-    noteTitle: string
+    open: boolean;
+    noteId: string;
+    noteTitle: string;
   }>({
     open: false,
     noteId: "",
     noteTitle: "",
-  })
-  const [error, setError] = useState("")
-  const [success, setSuccess] = useState("")
+  });
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  const token = useAuthStore((state) => state.token)
-  const navigate = useNavigate()
+  const token = useAuthStore((state) => state.token);
+  const navigate = useNavigate();
 
   const fetchTrashedNotes = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       const res = await fetch("http://localhost:5000/api/entries/trash", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      })
-      const data = await res.json()
+      });
+      const data = await res.json();
 
       if (data.success) {
-        setTrashedNotes(data.data || [])
+        setTrashedNotes(data.data || []);
       } else {
-        setError("Failed to load trashed notes")
+        setError("Failed to load trashed notes");
       }
     } catch (err) {
-      setError("Failed to load trashed notes")
-      console.error("Failed to fetch trashed notes:", err)
+      setError("Failed to load trashed notes");
+      console.error("Failed to fetch trashed notes:", err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleRestore = async (id: string, title: string) => {
     try {
@@ -79,63 +84,66 @@ const TrashPage = () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      })
+      });
 
       if (res.ok) {
-        setSuccess(`"${title}" has been restored successfully`)
-        fetchTrashedNotes()
-        setTimeout(() => setSuccess(""), 3000)
+        setSuccess(`"${title}" has been restored successfully`);
+        fetchTrashedNotes();
+        setTimeout(() => setSuccess(""), 3000);
       } else {
-        setError("Failed to restore note")
+        setError("Failed to restore note");
       }
     } catch (err) {
-      setError("Failed to restore note")
-      console.error("Restore failed:", err)
+      setError("Failed to restore note");
+      console.error("Restore failed:", err);
     }
-  }
+  };
 
   const handlePermanentDelete = async (id: string, title: string) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/entry/permanent/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const res = await fetch(
+        `http://localhost:5000/api/entry/permanent/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      })
+      );
 
       if (res.ok) {
-        setSuccess(`"${title}" has been permanently deleted`)
-        fetchTrashedNotes()
-        setTimeout(() => setSuccess(""), 3000)
+        setSuccess(`"${title}" has been permanently deleted`);
+        fetchTrashedNotes();
+        setTimeout(() => setSuccess(""), 3000);
       } else {
-        setError("Failed to delete note permanently")
+        setError("Failed to delete note permanently");
       }
     } catch (err) {
-      setError("Failed to delete note permanently")
-      console.error("Permanent delete failed:", err)
+      setError("Failed to delete note permanently");
+      console.error("Permanent delete failed:", err);
     }
-  }
+  };
 
   const openDeleteDialog = (noteId: string, noteTitle: string) => {
     setDeleteDialog({
       open: true,
       noteId,
       noteTitle,
-    })
-  }
+    });
+  };
 
   const closeDeleteDialog = () => {
     setDeleteDialog({
       open: false,
       noteId: "",
       noteTitle: "",
-    })
-  }
+    });
+  };
 
   const confirmPermanentDelete = () => {
-    handlePermanentDelete(deleteDialog.noteId, deleteDialog.noteTitle)
-    closeDeleteDialog()
-  }
+    handlePermanentDelete(deleteDialog.noteId, deleteDialog.noteTitle);
+    closeDeleteDialog();
+  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -144,24 +152,33 @@ const TrashPage = () => {
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
-    })
-  }
+    });
+  };
 
   useEffect(() => {
-    fetchTrashedNotes()
-  }, [])
+    fetchTrashedNotes();
+  }, []);
 
   const renderSkeletons = () => (
     <Grid container spacing={3}>
       {[...Array(6)].map((_, index) => (
-        <Grid size = {{xs:12, md:6, lg:4}} key={index}>
+        <Grid size={{ xs: 12, md: 6, lg: 4 }} key={index}>
           <Card sx={{ borderRadius: 3 }}>
             <CardContent sx={{ p: 3 }}>
               <Skeleton variant="text" height={32} sx={{ mb: 1 }} />
               <Skeleton variant="text" height={20} sx={{ mb: 1 }} />
               <Skeleton variant="text" height={20} sx={{ mb: 2 }} />
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Skeleton variant="rectangular" width={100} height={24} sx={{ borderRadius: 1 }} />
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Skeleton
+                  variant="rectangular"
+                  width={100}
+                  height={24}
+                  sx={{ borderRadius: 1 }}
+                />
                 <Stack direction="row" spacing={1}>
                   <Skeleton variant="circular" width={32} height={32} />
                   <Skeleton variant="circular" width={32} height={32} />
@@ -172,13 +189,19 @@ const TrashPage = () => {
         </Grid>
       ))}
     </Grid>
-  )
+  );
 
   return (
     <MainLayout>
       <Container maxWidth="xl" sx={{ py: 3 }}>
         <Box sx={{ mb: 4 }}>
-          <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={2} sx={{ mb: 2 }}>
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+            spacing={2}
+            sx={{ mb: 2 }}
+          >
             <Stack direction="row" alignItems="center" spacing={2}>
               <IconButton
                 onClick={() => navigate("/dashboard")}
@@ -195,7 +218,12 @@ const TrashPage = () => {
             </Stack>
 
             <Stack direction="row" spacing={1}>
-              <Button variant="outlined" onClick={fetchTrashedNotes} disabled={loading} sx={{ borderRadius: 2 }}>
+              <Button
+                variant="outlined"
+                onClick={fetchTrashedNotes}
+                disabled={loading}
+                sx={{ borderRadius: 2 }}
+              >
                 Refresh
               </Button>
             </Stack>
@@ -218,8 +246,8 @@ const TrashPage = () => {
             <Stack direction="row" alignItems="center" spacing={1}>
               <Warning fontSize="small" />
               <Typography variant="body2">
-                Notes in trash will be automatically deleted after 30 days. You can restore them or delete them
-                permanently.
+                Notes in trash will be automatically deleted after 30 days. You
+                can restore them or delete them permanently.
               </Typography>
             </Stack>
           </Alert>
@@ -236,11 +264,20 @@ const TrashPage = () => {
               borderRadius: 3,
             }}
           >
-            <Typography variant="h5" color="text.secondary" sx={{ mb: 2, fontWeight: 600 }}>
+            <Typography
+              variant="h5"
+              color="text.secondary"
+              sx={{ mb: 2, fontWeight: 600 }}
+            >
               Trash is empty
             </Typography>
-            <Typography variant="body1" color="text.secondary" sx={{ mb: 4, maxWidth: 400, mx: "auto" }}>
-              When you delete notes, they'll appear here. You can restore them or delete them permanently.
+            <Typography
+              variant="body1"
+              color="text.secondary"
+              sx={{ mb: 4, maxWidth: 400, mx: "auto" }}
+            >
+              When you delete notes, they'll appear here. You can restore them
+              or delete them permanently.
             </Typography>
             <Button
               variant="contained"
@@ -258,7 +295,7 @@ const TrashPage = () => {
         ) : (
           <Grid container spacing={3}>
             {trashedNotes.map((note) => (
-              <Grid size = {{xs:12, md:6, lg:4}} key={note.id}>
+              <Grid size={{ xs: 12, md: 6, lg: 4 }} key={note.id}>
                 <Card
                   sx={{
                     height: "100%",
@@ -273,7 +310,14 @@ const TrashPage = () => {
                     },
                   }}
                 >
-                  <CardContent sx={{ p: 3, height: "100%", display: "flex", flexDirection: "column" }}>
+                  <CardContent
+                    sx={{
+                      p: 3,
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
                     <Stack spacing={2} sx={{ height: "100%" }}>
                       {/* Header */}
                       <Box>
@@ -311,7 +355,12 @@ const TrashPage = () => {
 
                       {/* Footer */}
                       <Box sx={{ mt: "auto" }}>
-                        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
+                        <Stack
+                          direction="row"
+                          justifyContent="space-between"
+                          alignItems="center"
+                          spacing={1}
+                        >
                           <Chip
                             label={`Deleted: ${formatDate(note.updatedAt)}`}
                             size="small"
@@ -342,7 +391,9 @@ const TrashPage = () => {
 
                             <IconButton
                               size="small"
-                              onClick={() => openDeleteDialog(note.id, note.title)}
+                              onClick={() =>
+                                openDeleteDialog(note.id, note.title)
+                              }
                               sx={{
                                 color: "error.main",
                                 "&:hover": {
@@ -382,14 +433,20 @@ const TrashPage = () => {
           </DialogTitle>
           <DialogContent>
             <Typography variant="body1" sx={{ mb: 2 }}>
-              Are you sure you want to permanently delete <strong>"{deleteDialog.noteTitle}"</strong>?
+              Are you sure you want to permanently delete{" "}
+              <strong>"{deleteDialog.noteTitle}"</strong>?
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              This action cannot be undone. The note will be permanently removed from your account.
+              This action cannot be undone. The note will be permanently removed
+              from your account.
             </Typography>
           </DialogContent>
           <DialogActions sx={{ p: 3, pt: 1 }}>
-            <Button onClick={closeDeleteDialog} variant="outlined" sx={{ borderRadius: 2 }}>
+            <Button
+              onClick={closeDeleteDialog}
+              variant="outlined"
+              sx={{ borderRadius: 2 }}
+            >
               Cancel
             </Button>
             <Button
@@ -404,7 +461,7 @@ const TrashPage = () => {
         </Dialog>
       </Container>
     </MainLayout>
-  )
-}
+  );
+};
 
-export default TrashPage
+export default TrashPage;

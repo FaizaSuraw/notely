@@ -1,4 +1,4 @@
-import type React from "react"
+import type React from "react";
 
 import {
   Box,
@@ -12,12 +12,18 @@ import {
   Chip,
   IconButton,
   Divider,
-} from "@mui/material"
-import { Save, Preview, ArrowBack, Star, StarBorder } from "@mui/icons-material"
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { useAuthStore } from "../store/authStore"
-import MainLayout from "../components/MainLayout"
+} from "@mui/material";
+import {
+  Save,
+  Preview,
+  ArrowBack,
+  Star,
+  StarBorder,
+} from "@mui/icons-material";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/authStore";
+import MainLayout from "../components/MainLayout";
 
 const NewNote = () => {
   const [formData, setFormData] = useState({
@@ -25,29 +31,33 @@ const NewNote = () => {
     synopsis: "",
     content: "",
     isFavorite: false,
-  })
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
-  const [success, setSuccess] = useState("")
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  const token = useAuthStore((state) => state.token)
-  const navigate = useNavigate()
+  const token = useAuthStore((state) => state.token);
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-    if (error) setError("")
-  }
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (error) setError("");
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    if (!formData.title.trim() || !formData.synopsis.trim() || !formData.content.trim()) {
-      setError("All fields are required")
-      return
+    if (
+      !formData.title.trim() ||
+      !formData.synopsis.trim() ||
+      !formData.content.trim()
+    ) {
+      setError("All fields are required");
+      return;
     }
 
-    setLoading(true)
-    setError("")
+    setLoading(true);
+    setError("");
 
     try {
       const res = await fetch("http://localhost:5000/api/entries", {
@@ -62,36 +72,44 @@ const NewNote = () => {
           content: formData.content.trim(),
           isFavorite: formData.isFavorite,
         }),
-      })
+      });
 
-      const data = await res.json()
+      const data = await res.json();
 
       if (data.success) {
-        setSuccess("Note created successfully! Redirecting...")
-        setTimeout(() => navigate("/dashboard"), 1500)
+        setSuccess("Note created successfully! Redirecting...");
+        setTimeout(() => navigate("/dashboard"), 1500);
       } else {
-        setError(data.message || "Failed to create note")
+        setError(data.message || "Failed to create note");
       }
     } catch (err) {
-      setError("Server error. Please try again.")
-      console.error(err)
+      setError("Server error. Please try again.");
+      console.error(err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleSaveAsDraft = async () => {
-    console.log("Save as draft")
-  }
+    console.log("Save as draft");
+  };
 
-  const wordCount = formData.content.split(/\s+/).filter((word) => word.length > 0).length
-  const charCount = formData.content.length
+  const wordCount = formData.content
+    .split(/\s+/)
+    .filter((word) => word.length > 0).length;
+  const charCount = formData.content.length;
 
   return (
     <MainLayout>
       <Container maxWidth="lg" sx={{ py: 3 }}>
         <Box sx={{ mb: 4 }}>
-          <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={2} sx={{ mb: 2 }}>
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+            spacing={2}
+            sx={{ mb: 2 }}
+          >
             <Stack direction="row" alignItems="center" spacing={2}>
               <IconButton
                 onClick={() => navigate(-1)}
@@ -108,7 +126,9 @@ const NewNote = () => {
             </Stack>
 
             <IconButton
-              onClick={() => setFormData({ ...formData, isFavorite: !formData.isFavorite })}
+              onClick={() =>
+                setFormData({ ...formData, isFavorite: !formData.isFavorite })
+              }
               sx={{
                 color: formData.isFavorite ? "warning.main" : "grey.400",
                 "&:hover": {
@@ -206,8 +226,18 @@ const NewNote = () => {
                   helperText="Supports Markdown formatting (# headers, **bold**, *italic*, etc.)"
                 />
 
-                <Stack direction="row" spacing={2} justifyContent="flex-end" alignItems="center">
-                  <Button variant="outlined" onClick={handleSaveAsDraft} disabled={loading} sx={{ px: 3 }}>
+                <Stack
+                  direction="row"
+                  spacing={2}
+                  justifyContent="flex-end"
+                  alignItems="center"
+                >
+                  <Button
+                    variant="outlined"
+                    onClick={handleSaveAsDraft}
+                    disabled={loading}
+                    sx={{ px: 3 }}
+                  >
                     Save as Draft
                   </Button>
 
@@ -259,46 +289,92 @@ const NewNote = () => {
 
               <Stack spacing={3}>
                 <Box>
-                  <Typography variant="caption" color="text.secondary" fontWeight={600}>
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    fontWeight={600}
+                  >
                     Status
                   </Typography>
                   <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
-                    <Chip label="Draft" size="small" color="info" variant="outlined" />
-                    {formData.isFavorite && <Chip label="Favorite" size="small" color="warning" variant="outlined" />}
+                    <Chip
+                      label="Draft"
+                      size="small"
+                      color="info"
+                      variant="outlined"
+                    />
+                    {formData.isFavorite && (
+                      <Chip
+                        label="Favorite"
+                        size="small"
+                        color="warning"
+                        variant="outlined"
+                      />
+                    )}
                   </Stack>
                 </Box>
 
                 <Box>
-                  <Typography variant="caption" color="text.secondary" fontWeight={600}>
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    fontWeight={600}
+                  >
                     Word Count
                   </Typography>
                   <Typography variant="body2">{wordCount} words</Typography>
                 </Box>
 
                 <Box>
-                  <Typography variant="caption" color="text.secondary" fontWeight={600}>
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    fontWeight={600}
+                  >
                     Character Count
                   </Typography>
-                  <Typography variant="body2">{charCount} characters</Typography>
+                  <Typography variant="body2">
+                    {charCount} characters
+                  </Typography>
                 </Box>
 
                 <Divider />
 
                 <Box>
-                  <Typography variant="caption" color="text.secondary" fontWeight={600}>
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    fontWeight={600}
+                  >
                     Tips
                   </Typography>
                   <Stack spacing={1} sx={{ mt: 1 }}>
-                    <Typography variant="body2" color="text.secondary" fontSize="0.85rem">
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      fontSize="0.85rem"
+                    >
                       • Use # for headers
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" fontSize="0.85rem">
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      fontSize="0.85rem"
+                    >
                       • **bold** and *italic* text
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" fontSize="0.85rem">
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      fontSize="0.85rem"
+                    >
                       • Create lists with - or 1.
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" fontSize="0.85rem">
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      fontSize="0.85rem"
+                    >
                       • Add links with [text](url)
                     </Typography>
                   </Stack>
@@ -309,7 +385,7 @@ const NewNote = () => {
         </form>
       </Container>
     </MainLayout>
-  )
-}
+  );
+};
 
-export default NewNote
+export default NewNote;

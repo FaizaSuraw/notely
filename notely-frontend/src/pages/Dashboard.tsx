@@ -69,7 +69,7 @@ const Dashboard = () => {
   const filteredNotes = notes.filter(
     (note) =>
       note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      note.synopsis.toLowerCase().includes(searchQuery.toLowerCase())
+      note.synopsis.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const favoriteNotes = filteredNotes.filter((note) => note.isFavorite);
@@ -78,8 +78,8 @@ const Dashboard = () => {
   const handleFavoriteToggle = (id: string) => {
     setNotes((prev) =>
       prev.map((note) =>
-        note.id === id ? { ...note, isFavorite: !note.isFavorite } : note
-      )
+        note.id === id ? { ...note, isFavorite: !note.isFavorite } : note,
+      ),
     );
   };
 
@@ -106,7 +106,7 @@ const Dashboard = () => {
   const renderSkeletons = () => (
     <Grid container spacing={2}>
       {[...Array(6)].map((_, index) => (
-        <Grid size = {{xs:12, md:6, lg:4}} key={index}>
+        <Grid size={{ xs: 12, md: 6, lg: 4 }} key={index}>
           <Card sx={{ p: 2, borderRadius: 2 }}>
             <Skeleton variant="rectangular" height={4} sx={{ mb: 1 }} />
             <Skeleton variant="text" height={24} sx={{ mb: 1 }} />
@@ -197,9 +197,21 @@ const Dashboard = () => {
           </Stack>
 
           <Stack direction="row" spacing={1} flexWrap="wrap" mb={2}>
-            <Chip label={`${notes.length} Total`} color="primary" variant="outlined" />
-            <Chip label={`${favoriteNotes.length} Favorites`} color="warning" variant="outlined" />
-            <Chip label={`${recentNotes.length} Recent`} color="success" variant="outlined" />
+            <Chip
+              label={`${notes.length} Total`}
+              color="primary"
+              variant="outlined"
+            />
+            <Chip
+              label={`${favoriteNotes.length} Favorites`}
+              color="warning"
+              variant="outlined"
+            />
+            <Chip
+              label={`${recentNotes.length} Recent`}
+              color="success"
+              variant="outlined"
+            />
           </Stack>
         </Box>
 
@@ -222,7 +234,7 @@ const Dashboard = () => {
         ) : (
           <Grid container spacing={2}>
             {filteredNotes.map((note) => (
-              <Grid size = {{xs:12, sm:6, lg:4}} key={note.id}>
+              <Grid size={{ xs: 12, sm: 6, lg: 4 }} key={note.id}>
                 <NoteCard
                   id={note.id}
                   title={note.title}

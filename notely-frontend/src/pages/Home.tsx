@@ -10,8 +10,8 @@ import {
   Chip,
   useTheme,
   alpha,
-} from "@mui/material"
-import { useNavigate } from "react-router-dom"
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import {
   Edit,
   Security,
@@ -21,33 +21,37 @@ import {
   Group,
   Star,
   ArrowForward,
-} from "@mui/icons-material"
-import Footer from "../components/Footer"
+} from "@mui/icons-material";
+import Footer from "../components/Footer";
 
 const Home = () => {
-  const navigate = useNavigate()
-  const theme = useTheme()
+  const navigate = useNavigate();
+  const theme = useTheme();
 
   const features = [
     {
       icon: <Edit sx={{ fontSize: 36, color: "primary.main" }} />,
       title: "Rich Text Editor",
-      description: "Write with a powerful editor that supports markdown, formatting, and media embedding.",
+      description:
+        "Write with a powerful editor that supports markdown, formatting, and media embedding.",
     },
     {
       icon: <Security sx={{ fontSize: 36, color: "primary.main" }} />,
       title: "Secure & Private",
-      description: "Your notes are encrypted end-to-end and stored securely in the cloud.",
+      description:
+        "Your notes are encrypted end-to-end and stored securely in the cloud.",
     },
     {
       icon: <Cloud sx={{ fontSize: 36, color: "primary.main" }} />,
       title: "Cloud Sync",
-      description: "Access your notes from anywhere with real-time synchronization across devices.",
+      description:
+        "Access your notes from anywhere with real-time synchronization across devices.",
     },
     {
       icon: <Speed sx={{ fontSize: 36, color: "primary.main" }} />,
       title: "Lightning Fast",
-      description: "Optimized for speed with instant search and quick note creation.",
+      description:
+        "Optimized for speed with instant search and quick note creation.",
     },
     {
       icon: <Devices sx={{ fontSize: 36, color: "primary.main" }} />,
@@ -57,9 +61,10 @@ const Home = () => {
     {
       icon: <Group sx={{ fontSize: 36, color: "primary.main" }} />,
       title: "Team Collaboration",
-      description: "Share notes and collaborate with team members in real-time.",
+      description:
+        "Share notes and collaborate with team members in real-time.",
     },
-  ]
+  ];
 
   const testimonials = [
     {
@@ -83,14 +88,14 @@ const Home = () => {
       rating: 5,
       text: "The rich text editor is fantastic for drafting articles. I can focus on writing without distractions.",
     },
-  ]
+  ];
 
   const stats = [
     { number: "50K+", label: "Active Users" },
     { number: "1M+", label: "Notes Created" },
     { number: "99.9%", label: "Uptime" },
     { number: "24/7", label: "Support" },
-  ]
+  ];
 
   return (
     <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
@@ -155,7 +160,8 @@ const Home = () => {
                 fontSize: { xs: "1.1rem", sm: "1.3rem" },
               }}
             >
-              Capture ideas, plan tasks, and keep your thoughts organized — beautifully and securely.
+              Capture ideas, plan tasks, and keep your thoughts organized —
+              beautifully and securely.
             </Typography>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
               <Button
@@ -194,12 +200,18 @@ const Home = () => {
             </Stack>
             <Grid container spacing={2} sx={{ maxWidth: 600 }}>
               {stats.map((stat, index) => (
-                <Grid size = {{xs:6, sm:3}} key={index}>
+                <Grid size={{ xs: 6, sm: 3 }} key={index}>
                   <Box textAlign="center">
-                    <Typography variant="h5" sx={{ color: "white", fontWeight: 700 }}>
+                    <Typography
+                      variant="h5"
+                      sx={{ color: "white", fontWeight: 700 }}
+                    >
                       {stat.number}
                     </Typography>
-                    <Typography variant="body2" sx={{ color: alpha(theme.palette.common.white, 0.8) }}>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: alpha(theme.palette.common.white, 0.8) }}
+                    >
                       {stat.label}
                     </Typography>
                   </Box>
@@ -212,12 +224,16 @@ const Home = () => {
 
       <Box sx={{ py: 8, bgcolor: "grey.50" }}>
         <Container maxWidth="lg">
-          <Typography variant="h4" textAlign="center" sx={{ mb: 4, fontWeight: 700 }}>
+          <Typography
+            variant="h4"
+            textAlign="center"
+            sx={{ mb: 4, fontWeight: 700 }}
+          >
             Everything you need to stay organized
           </Typography>
           <Grid container spacing={3}>
             {features.map((feature, index) => (
-              <Grid size = {{xs:12, md:6, lg:4}} key={index}>
+              <Grid size={{ xs: 12, md: 6, lg: 4 }} key={index}>
                 <Card sx={{ p: 4, borderRadius: 3, textAlign: "center" }}>
                   <Box sx={{ mb: 2 }}>{feature.icon}</Box>
                   <Typography variant="h6" sx={{ fontWeight: 700 }}>
@@ -235,23 +251,32 @@ const Home = () => {
 
       <Box sx={{ py: 8 }}>
         <Container maxWidth="lg">
-          <Typography variant="h4" textAlign="center" sx={{ mb: 4, fontWeight: 700 }}>
+          <Typography
+            variant="h4"
+            textAlign="center"
+            sx={{ mb: 4, fontWeight: 700 }}
+          >
             Loved by thousands of users
           </Typography>
           <Grid container spacing={3}>
             {testimonials.map((testimonial, index) => (
-              <Grid size = {{xs:12, md:4}} key={index}>
+              <Grid size={{ xs: 12, md: 4 }} key={index}>
                 <Card sx={{ p: 3 }}>
                   <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
                     {[...Array(testimonial.rating)].map((_, i) => (
                       <Star key={i} sx={{ color: "#FFD700", fontSize: 18 }} />
                     ))}
                   </Stack>
-                  <Typography variant="body2" sx={{ fontStyle: "italic", mb: 2 }}>
+                  <Typography
+                    variant="body2"
+                    sx={{ fontStyle: "italic", mb: 2 }}
+                  >
                     "{testimonial.text}"
                   </Typography>
                   <Stack direction="row" spacing={2} alignItems="center">
-                    <Avatar sx={{ bgcolor: "primary.main" }}>{testimonial.avatar}</Avatar>
+                    <Avatar sx={{ bgcolor: "primary.main" }}>
+                      {testimonial.avatar}
+                    </Avatar>
                     <Box>
                       <Typography variant="subtitle1" fontWeight={600}>
                         {testimonial.name}
@@ -281,7 +306,8 @@ const Home = () => {
             Ready to get organized?
           </Typography>
           <Typography variant="body1" sx={{ mb: 4, opacity: 0.9 }}>
-            Join thousands of users who’ve transformed their note-taking with Notely.
+            Join thousands of users who’ve transformed their note-taking with
+            Notely.
           </Typography>
           <Button
             variant="contained"
@@ -304,7 +330,7 @@ const Home = () => {
 
       <Footer />
     </Box>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

@@ -158,7 +158,7 @@ const Register = () => {
               <Divider sx={{ width: "100%" }}>or use email</Divider>
 
               <Grid container spacing={1}>
-                <Grid size = {{xs:6}}>
+                <Grid size={{ xs: 6 }}>
                   <TextField
                     name="firstName"
                     label="First Name"
@@ -169,7 +169,7 @@ const Register = () => {
                     disabled={loading}
                   />
                 </Grid>
-                <Grid size = {{xs:6}}>
+                <Grid size={{ xs: 6 }}>
                   <TextField
                     name="lastName"
                     label="Last Name"
@@ -180,7 +180,7 @@ const Register = () => {
                     disabled={loading}
                   />
                 </Grid>
-                <Grid size = {{xs:12}}>
+                <Grid size={{ xs: 12 }}>
                   <TextField
                     name="username"
                     label="Username"
@@ -191,7 +191,7 @@ const Register = () => {
                     disabled={loading}
                   />
                 </Grid>
-                <Grid size = {{xs:12}}>
+                <Grid size={{ xs: 12 }}>
                   <TextField
                     name="email"
                     label="Email"
@@ -203,7 +203,7 @@ const Register = () => {
                     disabled={loading}
                   />
                 </Grid>
-                <Grid size = {{xs:12}}>
+                <Grid size={{ xs: 12 }}>
                   <TextField
                     name="password"
                     label="Password"
@@ -241,8 +241,8 @@ const Register = () => {
                               passwordStrength < 50
                                 ? "error.main"
                                 : passwordStrength < 75
-                                ? "warning.main"
-                                : "success.main",
+                                  ? "warning.main"
+                                  : "success.main",
                           },
                         }}
                       />
@@ -251,8 +251,8 @@ const Register = () => {
                         {passwordStrength < 50
                           ? "Weak"
                           : passwordStrength < 75
-                          ? "Medium"
-                          : "Strong"}
+                            ? "Medium"
+                            : "Strong"}
                       </Typography>
                     </Stack>
                   )}

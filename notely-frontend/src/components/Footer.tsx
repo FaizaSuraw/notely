@@ -1,5 +1,14 @@
-import { Box, Container, Grid, Typography, Link, Stack, IconButton, Divider } from "@mui/material"
-import { Twitter, LinkedIn, GitHub, Email } from "@mui/icons-material"
+import {
+  Box,
+  Container,
+  Grid,
+  Typography,
+  Link,
+  Stack,
+  IconButton,
+  Divider,
+} from "@mui/material";
+import { Twitter, LinkedIn, GitHub, Email } from "@mui/icons-material";
 
 const Footer = () => {
   const footerLinks = {
@@ -27,14 +36,18 @@ const Footer = () => {
       { name: "Cookie Policy", href: "#cookies" },
       { name: "GDPR", href: "#gdpr" },
     ],
-  }
+  };
 
   const socialLinks = [
     { icon: <Twitter fontSize="small" />, href: "#twitter", label: "Twitter" },
-    { icon: <LinkedIn fontSize="small" />, href: "#linkedin", label: "LinkedIn" },
+    {
+      icon: <LinkedIn fontSize="small" />,
+      href: "#linkedin",
+      label: "LinkedIn",
+    },
     { icon: <GitHub fontSize="small" />, href: "#github", label: "GitHub" },
     { icon: <Email fontSize="small" />, href: "#email", label: "Email" },
-  ]
+  ];
 
   return (
     <Box
@@ -48,7 +61,7 @@ const Footer = () => {
     >
       <Container maxWidth="lg">
         <Grid container spacing={4}>
-          <Grid size = {{xs:12, md:4}}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Typography
               variant="h5"
               sx={{
@@ -72,7 +85,9 @@ const Footer = () => {
                 lineHeight: 1.5,
               }}
             >
-              Your personal note-taking companion that grows with you. Capture ideas, plan tasks, and keep your thoughts organized beautifully and securely.
+              Your personal note-taking companion that grows with you. Capture
+              ideas, plan tasks, and keep your thoughts organized beautifully
+              and securely.
             </Typography>
             <Stack direction="row" spacing={1}>
               {socialLinks.map((social, index) => (
@@ -96,7 +111,7 @@ const Footer = () => {
           </Grid>
 
           {Object.entries(footerLinks).map(([category, links]) => (
-            <Grid size = {{xs:6, sm:3, md:2}} key={category}>
+            <Grid size={{ xs: 6, sm: 3, md: 2 }} key={category}>
               <Typography
                 variant="subtitle2"
                 sx={{
@@ -133,17 +148,30 @@ const Footer = () => {
 
         <Divider sx={{ my: 4, borderColor: "grey.800" }} />
 
-        <Stack direction={{ xs: "column", sm: "row" }} justifyContent="space-between" alignItems="center" spacing={1}>
-          <Typography variant="caption" color="grey.500" sx={{ fontSize: "0.75rem" }}>
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          justifyContent="space-between"
+          alignItems="center"
+          spacing={1}
+        >
+          <Typography
+            variant="caption"
+            color="grey.500"
+            sx={{ fontSize: "0.75rem" }}
+          >
             © {new Date().getFullYear()} Notely. All rights reserved.
           </Typography>
-          <Typography variant="caption" color="grey.500" sx={{ fontSize: "0.75rem" }}>
+          <Typography
+            variant="caption"
+            color="grey.500"
+            sx={{ fontSize: "0.75rem" }}
+          >
             Made with ❤️ for better note-taking
           </Typography>
         </Stack>
       </Container>
     </Box>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

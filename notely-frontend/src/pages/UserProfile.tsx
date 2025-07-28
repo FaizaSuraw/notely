@@ -120,7 +120,7 @@ const UserProfile = () => {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const res = await fetch(`${api}/api/user/profile`, {
+      const res = await fetch(`${api}/api/user`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

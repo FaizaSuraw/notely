@@ -1,130 +1,315 @@
+import type React from "react"
+
 import {
   Box,
   Button,
   Container,
   TextField,
   Typography,
-  Snackbar,
-  CircularProgress,
-} from "@mui/material";
-import MuiAlert from "@mui/material/Alert";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../store/authStore";
-import MainLayout from "../components/MainLayout";
-import MdEditor from "react-markdown-editor-lite";
-import Markdown from "react-markdown";
+  Paper,
+  Stack,
+  Alert,
+  Chip,
+  IconButton,
+  Divider,
+} from "@mui/material"
+import { Save, Preview, ArrowBack, Star, StarBorder } from "@mui/icons-material"
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { useAuthStore } from "../store/authStore"
+import MainLayout from "../components/MainLayout"
 
 const NewNote = () => {
-  const [title, setTitle] = useState("");
-  const [synopsis, setSynopsis] = useState("");
-  const [content, setContent] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "info" });
+  const [formData, setFormData] = useState({
+    title: "",
+    synopsis: "",
+    content: "",
+    isFavorite: false,
+  })
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
 
-  const token = useAuthStore((state) => state.token);
-  useEffect(() => {
-  console.log("Token from authStore:", token);
-}, [token]);
-  const navigate = useNavigate();
+  const token = useAuthStore((state) => state.token)
+  const navigate = useNavigate()
 
-  const handleEditorChange = ({ text }: { html: string; text: string }) => {
-    setContent(text);
-  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+    if (error) setError("")
+  }
 
-  const handleSubmit = async () => {
-    if (!title || !synopsis || !content) {
-      return setSnackbar({ open: true, message: "All fields are required", severity: "warning" });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!formData.title.trim() || !formData.synopsis.trim() || !formData.content.trim()) {
+      setError("All fields are required")
+      return
     }
 
-    setLoading(true);
+    setLoading(true)
+    setError("")
+
     try {
-      console.log("Token before POST:", token);
       const res = await fetch("http://localhost:5000/api/entries", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ title, synopsis, content }),
-      });
+        body: JSON.stringify({
+          title: formData.title.trim(),
+          synopsis: formData.synopsis.trim(),
+          content: formData.content.trim(),
+          isFavorite: formData.isFavorite,
+        }),
+      })
 
-      const data = await res.json();
+      const data = await res.json()
 
-      if (!data.success) {
-        return setSnackbar({ open: true, message: data.message, severity: "error" });
+      if (data.success) {
+        setSuccess("Note created successfully! Redirecting...")
+        setTimeout(() => navigate("/dashboard"), 1500)
+      } else {
+        setError(data.message || "Failed to create note")
       }
-
-      setSnackbar({ open: true, message: "Note created successfully", severity: "success" });
-      setTimeout(() => navigate("/dashboard"), 1500);
-    } catch (error) {
-      setSnackbar({ open: true, message: "Server error", severity: "error" });
+    } catch (err) {
+      setError("Server error. Please try again.")
+      console.error(err)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
+
+  const handleSaveAsDraft = async () => {
+    console.log("Save as draft")
+  }
+
+  const wordCount = formData.content.split(/\s+/).filter((word) => word.length > 0).length
+  const charCount = formData.content.length
 
   return (
     <MainLayout>
-      <Container maxWidth="md" sx={{ py: 4 }}>
-        <Typography variant="h4" fontWeight="bold" mb={3}>
-          📝 Create New Entry
-        </Typography>
+      <Container maxWidth="lg" sx={{ py: 3 }}>
+        <Box sx={{ mb: 4 }}>
+          <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={2} sx={{ mb: 2 }}>
+            <Stack direction="row" alignItems="center" spacing={2}>
+              <IconButton
+                onClick={() => navigate(-1)}
+                sx={{
+                  bgcolor: "grey.100",
+                  "&:hover": { bgcolor: "grey.200" },
+                }}
+              >
+                <ArrowBack />
+              </IconButton>
+              <Typography variant="h4" fontWeight={700} color="grey.800">
+                📝 Create New Note
+              </Typography>
+            </Stack>
 
-        <TextField
-          fullWidth
-          label="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          margin="normal"
-          required
-        />
+            <IconButton
+              onClick={() => setFormData({ ...formData, isFavorite: !formData.isFavorite })}
+              sx={{
+                color: formData.isFavorite ? "warning.main" : "grey.400",
+                "&:hover": {
+                  bgcolor: formData.isFavorite ? "warning.50" : "grey.100",
+                },
+              }}
+            >
+              {formData.isFavorite ? <Star /> : <StarBorder />}
+            </IconButton>
+          </Stack>
 
-        <TextField
-          fullWidth
-          label="Synopsis"
-          value={synopsis}
-          onChange={(e) => setSynopsis(e.target.value)}
-          margin="normal"
-          required
-        />
-
-        <Box mt={3}>
-          <Typography variant="subtitle1" fontWeight="bold" mb={1}>
-            Content (Markdown Supported)
-          </Typography>
-          <MdEditor
-            style={{ height: "300px" }}
-            renderHTML={(text) => <Markdown>{text}</Markdown>}
-            onChange={handleEditorChange}
-            value={content}
-          />
+          {/* Alerts */}
+          {error && (
+            <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }}>
+              {error}
+            </Alert>
+          )}
+          {success && (
+            <Alert severity="success" sx={{ mb: 2, borderRadius: 2 }}>
+              {success}
+            </Alert>
+          )}
         </Box>
 
-        <Box mt={4} display="flex" justifyContent="flex-end">
-          <Button
-            variant="contained"
-            size="large"
-            sx={{ px: 4, py: 1.5 }}
-            onClick={handleSubmit}
-            disabled={loading}
-          >
-            {loading ? <CircularProgress size={24} /> : "Create Note"}
-          </Button>
-        </Box>
+        <form onSubmit={handleSubmit}>
+          <Stack direction={{ xs: "column", lg: "row" }} spacing={3}>
+            <Paper
+              sx={{
+                flex: 1,
+                p: 4,
+                borderRadius: 3,
+                border: "1px solid rgba(0,0,0,0.08)",
+                boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+              }}
+            >
+              <Stack spacing={3}>
+                <TextField
+                  label="Title"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleChange}
+                  fullWidth
+                  variant="outlined"
+                  disabled={loading}
+                  placeholder="Enter your note title..."
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      fontSize: "1.25rem",
+                      fontWeight: 600,
+                      borderRadius: 2,
+                    },
+                  }}
+                />
 
-        <Snackbar
-          open={snackbar.open}
-          autoHideDuration={3000}
-          onClose={() => setSnackbar({ ...snackbar, open: false })}
-        >
-          <MuiAlert elevation={6} variant="filled" severity={snackbar.severity as any}>
-            {snackbar.message}
-          </MuiAlert>
-        </Snackbar>
+                <TextField
+                  label="Synopsis"
+                  name="synopsis"
+                  value={formData.synopsis}
+                  onChange={handleChange}
+                  fullWidth
+                  multiline
+                  rows={2}
+                  variant="outlined"
+                  disabled={loading}
+                  placeholder="Brief description of your note..."
+                  helperText="A short summary that will help you find this note later"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: 2,
+                    },
+                  }}
+                />
+
+                <Divider />
+
+                <TextField
+                  label="Content"
+                  name="content"
+                  value={formData.content}
+                  onChange={handleChange}
+                  fullWidth
+                  multiline
+                  rows={20}
+                  variant="outlined"
+                  disabled={loading}
+                  placeholder="Start writing your note here... Markdown is supported!"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      fontFamily: "monospace",
+                      fontSize: "0.95rem",
+                      lineHeight: 1.6,
+                      borderRadius: 2,
+                    },
+                  }}
+                  helperText="Supports Markdown formatting (# headers, **bold**, *italic*, etc.)"
+                />
+
+                <Stack direction="row" spacing={2} justifyContent="flex-end" alignItems="center">
+                  <Button variant="outlined" onClick={handleSaveAsDraft} disabled={loading} sx={{ px: 3 }}>
+                    Save as Draft
+                  </Button>
+
+                  <Button
+                    variant="outlined"
+                    startIcon={<Preview />}
+                    disabled={loading || !formData.content}
+                    sx={{ px: 3 }}
+                  >
+                    Preview
+                  </Button>
+
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    startIcon={<Save />}
+                    disabled={loading}
+                    sx={{
+                      px: 4,
+                      py: 1.5,
+                      fontWeight: 600,
+                      borderRadius: 2,
+                      boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                      "&:hover": {
+                        boxShadow: "0 6px 16px rgba(0,0,0,0.2)",
+                        transform: "translateY(-1px)",
+                      },
+                      transition: "all 0.3s ease",
+                    }}
+                  >
+                    {loading ? "Creating..." : "Create Note"}
+                  </Button>
+                </Stack>
+              </Stack>
+            </Paper>
+            <Paper
+              sx={{
+                width: { xs: "100%", lg: 300 },
+                p: 3,
+                borderRadius: 3,
+                border: "1px solid rgba(0,0,0,0.08)",
+                boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+                height: "fit-content",
+              }}
+            >
+              <Typography variant="h6" fontWeight={600} sx={{ mb: 3 }}>
+                Note Details
+              </Typography>
+
+              <Stack spacing={3}>
+                <Box>
+                  <Typography variant="caption" color="text.secondary" fontWeight={600}>
+                    Status
+                  </Typography>
+                  <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
+                    <Chip label="Draft" size="small" color="info" variant="outlined" />
+                    {formData.isFavorite && <Chip label="Favorite" size="small" color="warning" variant="outlined" />}
+                  </Stack>
+                </Box>
+
+                <Box>
+                  <Typography variant="caption" color="text.secondary" fontWeight={600}>
+                    Word Count
+                  </Typography>
+                  <Typography variant="body2">{wordCount} words</Typography>
+                </Box>
+
+                <Box>
+                  <Typography variant="caption" color="text.secondary" fontWeight={600}>
+                    Character Count
+                  </Typography>
+                  <Typography variant="body2">{charCount} characters</Typography>
+                </Box>
+
+                <Divider />
+
+                <Box>
+                  <Typography variant="caption" color="text.secondary" fontWeight={600}>
+                    Tips
+                  </Typography>
+                  <Stack spacing={1} sx={{ mt: 1 }}>
+                    <Typography variant="body2" color="text.secondary" fontSize="0.85rem">
+                      • Use # for headers
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" fontSize="0.85rem">
+                      • **bold** and *italic* text
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" fontSize="0.85rem">
+                      • Create lists with - or 1.
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" fontSize="0.85rem">
+                      • Add links with [text](url)
+                    </Typography>
+                  </Stack>
+                </Box>
+              </Stack>
+            </Paper>
+          </Stack>
+        </form>
       </Container>
     </MainLayout>
-  );
-};
+  )
+}
 
-export default NewNote;
+export default NewNote

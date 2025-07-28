@@ -11,7 +11,7 @@ import TrashPage from "../pages/TrashPage";
 const AppRouter = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home/>} />
+      <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/dashboard" element={<Dashboard />} />
@@ -19,8 +19,6 @@ const AppRouter = () => {
       <Route path="/note/:id" element={<ViewNote />} />
       <Route path="/edit/:id" element={<EditNoteForm />} />
       <Route path="/trash" element={<TrashPage />} />
-
-      
 
       {/* <Route path="/register" element={<Register />} />
       <Route

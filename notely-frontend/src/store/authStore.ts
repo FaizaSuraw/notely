@@ -17,7 +17,7 @@ interface AuthState {
   clearToken: () => void;
   login: (
     id: string,
-    password: string
+    password: string,
   ) => Promise<{ success: boolean; message: string }>;
 }
 

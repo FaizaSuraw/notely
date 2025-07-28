@@ -31,7 +31,6 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const api = import.meta.env.VITE_API_URL;
 
   const navigate = useNavigate();
   const loginUser = useAuthStore((state) => state.login);
@@ -53,6 +52,7 @@ const Login = () => {
 
     try {
       const result = await loginUser(formData.id, formData.password);
+      
       if (result.success) {
         navigate("/dashboard");
       } else {

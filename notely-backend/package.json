@@ -8,7 +8,7 @@
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "prisma": "prisma",
-    "prod": "node dist/index.js"
+    "prod": "node ./dist/src/index.js"
   },
   "keywords": [],
   "author": "",

@@ -38,6 +38,7 @@ const Register = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  const api = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,7 +78,7 @@ const Register = () => {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/register", {
+      const res = await fetch(`${api}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -138,7 +139,6 @@ const Register = () => {
                   fullWidth
                   variant="outlined"
                   startIcon={<Google />}
-                  onClick={() => {}}
                   disabled={loading}
                   size="small"
                 >
@@ -148,7 +148,6 @@ const Register = () => {
                   fullWidth
                   variant="outlined"
                   startIcon={<GitHub />}
-                  onClick={() => {}}
                   disabled={loading}
                   size="small"
                 >
@@ -214,9 +213,8 @@ const Register = () => {
                     value={formData.password}
                     onChange={handleChange}
                     disabled={loading}
-                    slotProps={{
-                      input : {
-                        endAdornment: (
+                    InputProps={{
+                      endAdornment: (
                         <InputAdornment position="end">
                           <IconButton
                             onClick={() => setShowPassword(!showPassword)}
@@ -227,7 +225,6 @@ const Register = () => {
                           </IconButton>
                         </InputAdornment>
                       ),
-                      }
                     }}
                   />
                   {formData.password && (

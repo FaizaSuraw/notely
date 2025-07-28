@@ -3,7 +3,8 @@ import { getUserProfile, updateUserInfo } from "../controllers/user.controller";
 import { verifyToken } from "../middleware/verifyToken";
 
 const userRouter = Router();
-userRouter.patch("/user", verifyToken, updateUserInfo);
-userRouter.get("/user", verifyToken, getUserProfile);
+userRouter.get("/user/profile", verifyToken, getUserProfile)
+userRouter.patch("/user/profile", verifyToken, updateUserInfo)
+
 
 export default userRouter;

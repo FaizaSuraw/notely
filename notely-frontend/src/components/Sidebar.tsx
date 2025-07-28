@@ -34,6 +34,7 @@ const Sidebar = ({ open, drawerWidth }: SidebarProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const clearToken = useAuthStore((state) => state.clearToken);
+  const user = useAuthStore((state) => state.user);
 
   const menuItems = [
     { text: "Home", icon: <Home />, route: "/" },
@@ -88,6 +89,7 @@ const Sidebar = ({ open, drawerWidth }: SidebarProps) => {
               }}
             >
               <Avatar
+                src={user?.avatar}
                 sx={{
                   width: 32,
                   height: 32,
@@ -95,14 +97,14 @@ const Sidebar = ({ open, drawerWidth }: SidebarProps) => {
                   fontSize: "1rem",
                 }}
               >
-                <Person />
+                {!user?.avatar && <Person />}
               </Avatar>
               <Box sx={{ minWidth: 0 }}>
                 <Typography variant="subtitle2" noWrap fontSize="0.85rem">
-                  John Doe
+                  {user?.firstName} {user?.lastName}
                 </Typography>
                 <Typography variant="caption" color="text.secondary" noWrap>
-                  john@example.com
+                  {user?.email}
                 </Typography>
               </Box>
             </Stack>

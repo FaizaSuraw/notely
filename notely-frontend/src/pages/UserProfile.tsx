@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Box,
@@ -11,10 +10,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useEffect, useState } from "react";
 import { useAuthStore } from "../store/authStore";
-
-const CLOUD_NAME = "your-cloud-name"; // e.g., "dfsj23abc"
-const UPLOAD_PRESET = "your-upload-preset"; // e.g., "notely_preset"
 
 const UserProfile = () => {
   const token = useAuthStore((state) => state.token);
@@ -41,7 +38,7 @@ const UserProfile = () => {
       } else {
         setSnackbar("Failed to load profile");
       }
-    } catch {
+    } catch (err) {
       setSnackbar("Error fetching profile");
     } finally {
       setLoading(false);
@@ -64,33 +61,15 @@ const UserProfile = () => {
         body: JSON.stringify(profile),
       });
       const data = await res.json();
-      if (data.success) setSnackbar("Profile updated successfully");
-      else setSnackbar(data.message || "Update failed");
-    } catch {
+      if (data.success) {
+        setSnackbar("Profile updated successfully");
+      } else {
+        setSnackbar(data.message || "Update failed");
+      }
+    } catch (err) {
       setSnackbar("Error updating profile");
     } finally {
       setSaving(false);
-    }
-  };
-
-  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", UPLOAD_PRESET);
-
-    try {
-      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
-      setProfile((prev) => ({ ...prev, avatar: data.secure_url }));
-      setSnackbar("Image uploaded successfully!");
-    } catch {
-      setSnackbar("Failed to upload avatar");
     }
   };
 
@@ -119,10 +98,13 @@ const UserProfile = () => {
               src={profile.avatar}
               sx={{ width: 80, height: 80, mx: "auto", mb: 1 }}
             />
-            <Button variant="outlined" component="label" size="small">
-              Upload New Avatar
-              <input hidden type="file" accept="image/*" onChange={handleAvatarUpload} />
-            </Button>
+            <TextField
+              label="Avatar URL"
+              name="avatar"
+              fullWidth
+              value={profile.avatar}
+              onChange={handleChange}
+            />
           </Box>
 
           <TextField

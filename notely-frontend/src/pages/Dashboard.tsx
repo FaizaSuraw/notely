@@ -124,13 +124,13 @@ const Dashboard = () => {
 
   return (
     <MainLayout>
-      <Container maxWidth="md" sx={{ py: 1 }}>
-        <Box sx={{ mb: 2 }}>
+      <Container maxWidth="md" sx={{ py: 3 }}>
+        <Box sx={{ mb: 3 }}>
           <Stack
             direction={{ xs: "column", sm: "row" }}
             justifyContent="space-between"
             alignItems={{ xs: "flex-start", sm: "center" }}
-            spacing={1}
+            spacing={2}
             sx={{ mb: 2 }}
           >
             <Box>
@@ -147,7 +147,7 @@ const Dashboard = () => {
             <Button
               variant="contained"
               startIcon={<AddIcon />}
-              onClick={() => navigate("/NewNote")}
+              onClick={() => navigate("/new")}
               sx={{
                 px: 2,
                 py: 1,
@@ -220,9 +220,9 @@ const Dashboard = () => {
             </Button>
           </Card>
         ) : (
-          <Grid container spacing={1}>
+          <Grid container spacing={2}>
             {filteredNotes.map((note) => (
-              <Grid size = {{xs:10, sm:4, lg:3}} key={note.id}>
+              <Grid size = {{xs:12, sm:6, lg:4}} key={note.id}>
                 <NoteCard
                   id={note.id}
                   title={note.title}

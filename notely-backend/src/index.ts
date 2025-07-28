@@ -10,14 +10,12 @@ import userRoutes from "./routes/user.routes";
 dotenv.config();
 const app = express();
 
-const allowedOrigins = [
-  "http://localhost:5173",
-   "https://notely-kappa.vercel.app",
-];
-
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: [
+    "http://localhost:5173",
+    "https://notely-vv5e.vercel.app",
+  ],
     credentials: true,
   })
 );

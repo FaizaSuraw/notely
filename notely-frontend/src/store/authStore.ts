@@ -40,48 +40,51 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   login: async (id, password) => {
-    try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id, password }),
-      });
+  const baseUrl = import.meta.env.VITE_API_URL;
 
-      const data = await res.json();
+  try {
+    const res = await fetch(`${baseUrl}/api/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, password }),
+    });
 
-      if (!data.success) {
-        return {
-          success: false,
-          message: data.message || "Login failed",
-        };
-      }
+    const data = await res.json();
 
-      const token = data.data;
-      localStorage.setItem("token", token);
-      set({ token });
-
-      const profileRes = await fetch("http://localhost:5000/api/user", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (profileRes.ok) {
-        const profileData = await profileRes.json();
-        set({ user: profileData.data }); // assumes response is { data: user }
-      }
-
-      return {
-        success: true,
-        message: "Login successful",
-      };
-    } catch (err) {
+    if (!data.success) {
       return {
         success: false,
-        message: "Server error during login",
+        message: data.message || "Login failed",
       };
     }
-  },
+
+    const token = data.data;
+    localStorage.setItem("token", token);
+    set({ token });
+
+    const profileRes = await fetch(`${baseUrl}/api/user`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (profileRes.ok) {
+      const profileData = await profileRes.json();
+      set({ user: profileData.data }); 
+    }
+
+    return {
+      success: true,
+      message: "Login successful",
+    };
+  } catch (err) {
+    return {
+      success: false,
+      message: "Server error during login",
+    };
+  }
+},
+
 }));

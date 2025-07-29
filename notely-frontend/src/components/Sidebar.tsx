@@ -58,7 +58,7 @@ const Sidebar = ({ open, drawerWidth }: SidebarProps) => {
         width: open ? drawerWidth : 64,
         flexShrink: 0,
         "& .MuiDrawer-paper": {
-          width: open ? drawerWidth : 64,
+          width: open ? drawerWidth : 48,
           boxSizing: "border-box",
           transition: "width 0.3s ease",
           bgcolor: "white",
@@ -69,21 +69,21 @@ const Sidebar = ({ open, drawerWidth }: SidebarProps) => {
     >
       <Box
         sx={{
-          mt: 8,
+          mt: 1,
           height: "calc(100vh - 64px)",
           display: "flex",
           flexDirection: "column",
         }}
       >
         {open && (
-          <Box sx={{ p: 1.5, mb: 2 }}>
+          <Box sx={{ p: 1, mb: 1 }}>
             <Stack
               direction="row"
-              spacing={1.5}
+              spacing={1}
               alignItems="center"
               onClick={() => navigate("/profile")}
               sx={{
-                p: 1.5,
+                p: 1,
                 bgcolor: "grey.50",
                 borderRadius: 2,
                 cursor: "pointer",

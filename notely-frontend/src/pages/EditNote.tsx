@@ -41,6 +41,8 @@ const EditNote = () => {
   const navigate = useNavigate();
   const token = useAuthStore((state) => state.token);
 
+  const api = import.meta.env.VITE_API_URL;
+
   const [note, setNote] = useState<Note>({
     id: "",
     title: "",
@@ -59,7 +61,7 @@ const EditNote = () => {
   useEffect(() => {
     const fetchNote = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/entry/${id}`, {
+        const res = await fetch(`${api}/api/entry/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -101,7 +103,7 @@ const EditNote = () => {
     setError("");
 
     try {
-      const res = await fetch(`http://localhost:5000/api/entry/${id}`, {
+      const res = await fetch(`${api}/api/entry/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -140,7 +142,7 @@ const EditNote = () => {
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this note?")) {
       try {
-        const res = await fetch(`http://localhost:5000/api/entry/${id}`, {
+        const res = await fetch(`${api}/api/entry/${id}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -159,8 +161,8 @@ const EditNote = () => {
   if (loading) {
     return (
       <MainLayout>
-        <Container maxWidth="lg" sx={{ py: 3 }}>
-          <Stack spacing={3}>
+        <Container maxWidth="md" sx={{ py: 3 }}>
+          <Stack spacing={1}>
             <Skeleton
               variant="rectangular"
               height={60}
@@ -209,7 +211,7 @@ const EditNote = () => {
               >
                 <ArrowBack />
               </IconButton>
-              <Typography variant="h4" fontWeight={700} color="grey.800">
+              <Typography variant="h5" fontWeight={700} color="grey.800">
                 Edit Note
               </Typography>
             </Stack>
@@ -271,8 +273,8 @@ const EditNote = () => {
                   disabled={saving}
                   sx={{
                     "& .MuiOutlinedInput-root": {
-                      fontSize: "1.25rem",
-                      fontWeight: 600,
+                      fontSize: "1rem",
+                      fontWeight: 550,
                       borderRadius: 2,
                     },
                   }}
@@ -285,7 +287,7 @@ const EditNote = () => {
                   onChange={handleChange}
                   fullWidth
                   multiline
-                  rows={2}
+                  rows={1}
                   variant="outlined"
                   disabled={saving}
                   helperText="Brief description of your note"
@@ -296,8 +298,6 @@ const EditNote = () => {
                   }}
                 />
 
-                <Divider />
-
                 <TextField
                   label="Content"
                   name="content"
@@ -305,7 +305,7 @@ const EditNote = () => {
                   onChange={handleChange}
                   fullWidth
                   multiline
-                  rows={20}
+                  rows={10}
                   variant="outlined"
                   disabled={saving}
                   sx={{

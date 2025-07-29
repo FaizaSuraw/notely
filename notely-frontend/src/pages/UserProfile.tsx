@@ -1,5 +1,7 @@
 import type React from "react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   Avatar,
   Box,
@@ -34,10 +36,11 @@ import {
 } from "@mui/icons-material";
 import { useAuthStore } from "../store/authStore";
 
-const api = import.meta.env.VITE_API_URL;
+// const api = import.meta.env.VITE_API_URL;
 
 const CLOUD_NAME = "diuv0whr0";
 const UPLOAD_PRESET = "notely_upload";
+
 
 interface ProfileData {
   firstName: string;
@@ -50,6 +53,7 @@ interface ProfileData {
 }
 
 const UserProfile = () => {
+  const navigate = useNavigate();
   const theme = useTheme();
   const token = useAuthStore((state) => state.token);
   const [profile, setProfile] = useState<ProfileData>({
@@ -79,11 +83,11 @@ const UserProfile = () => {
     severity: "success" as "success" | "error",
   });
   const [hasChanges, setHasChanges] = useState(false);
-
+  const api = import.meta.env.VITE_API_URL;
   const fetchProfile = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${api}/api/user`, {
+      const res = await fetch(`${api}/api/user/profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -94,9 +98,8 @@ const UserProfile = () => {
       if (!data.success) {
         throw new Error(data.message || "Failed to fetch profile");
       }
-
-      setProfile(data.user);
-      setOriginalProfile(data.user);
+      setProfile(data.data);
+      setOriginalProfile(data.data);
     } catch (err) {
       console.error(err);
       setSnackbar({
@@ -120,7 +123,7 @@ const UserProfile = () => {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const res = await fetch(`${api}/api/user`, {
+      const res = await fetch(`${api}/api/user/profile`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -143,6 +146,9 @@ const UserProfile = () => {
         message: "Profile updated successfully!",
         severity: "success",
       });
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1500);
     } catch (err) {
       console.error(err);
       setSnackbar({
@@ -374,7 +380,7 @@ const UserProfile = () => {
                 sx={{ position: "relative", display: "inline-block", mb: 3 }}
               >
                 <Avatar
-                  src={profile.avatar}
+                  src={profile?.avatar || ""}
                   sx={{
                     width: 120,
                     height: 120,
@@ -384,6 +390,7 @@ const UserProfile = () => {
                 >
                   <Person sx={{ fontSize: 60 }} />
                 </Avatar>
+
                 {isEditing && (
                   <IconButton
                     component="label"

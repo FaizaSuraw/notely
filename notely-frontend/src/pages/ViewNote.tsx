@@ -41,6 +41,8 @@ const ViewNote = () => {
   const token = useAuthStore((state) => state.token);
   const navigate = useNavigate();
 
+  const api = import.meta.env.VITE_API_URL;
+
   const [note, setNote] = useState<Note | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -48,7 +50,7 @@ const ViewNote = () => {
   useEffect(() => {
     const fetchNote = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/entry/${id}`, {
+        const res = await fetch(`${api}/api/entry/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -80,7 +82,7 @@ const ViewNote = () => {
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this note?")) {
       try {
-        const res = await fetch(`http://localhost:5000/api/entry/${id}`, {
+        const res = await fetch(`${api}/api/entry/${id}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -103,7 +105,7 @@ const ViewNote = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/entry/${id}/favorite`,
+        `${api}/api/entry/${id}/favorite`,
         {
           method: "PATCH",
           headers: {
@@ -184,7 +186,7 @@ const ViewNote = () => {
   if (loading) {
     return (
       <MainLayout>
-        <Container maxWidth="lg" sx={{ py: 3 }}>
+        <Container maxWidth="md" sx={{ py: 3 }}>
           <Stack spacing={3}>
             <Skeleton
               variant="rectangular"
@@ -216,7 +218,7 @@ const ViewNote = () => {
   if (error || !note) {
     return (
       <MainLayout>
-        <Container maxWidth="lg" sx={{ py: 3 }}>
+        <Container maxWidth="md" sx={{ py: 3 }}>
           <Alert severity="error" sx={{ borderRadius: 2 }}>
             {error || "Note not found"}
           </Alert>
@@ -237,7 +239,7 @@ const ViewNote = () => {
 
   return (
     <MainLayout>
-      <Container maxWidth="lg" sx={{ py: 3 }}>
+      <Container maxWidth="md" sx={{ py: 3 }}>
         <Box sx={{ mb: 4 }}>
           <Stack
             direction="row"
@@ -256,7 +258,7 @@ const ViewNote = () => {
               >
                 <ArrowBack />
               </IconButton>
-              <Typography variant="h4" fontWeight={700} color="grey.800">
+              <Typography variant="h5" fontWeight={700} color="grey.800">
                 View Note
               </Typography>
             </Stack>
@@ -316,7 +318,7 @@ const ViewNote = () => {
           >
             <Stack spacing={3}>
               <Typography
-                variant="h3"
+                variant="h6"
                 fontWeight={700}
                 color="grey.800"
                 sx={{ lineHeight: 1.2 }}
@@ -336,7 +338,7 @@ const ViewNote = () => {
               </Typography>
 
               <Divider />
-              <Box sx={{ minHeight: 400 }}>{renderMarkdown(note.content)}</Box>
+              <Box sx={{ minHeight: 200 }}>{renderMarkdown(note.content)}</Box>
               <Stack
                 direction="row"
                 spacing={2}

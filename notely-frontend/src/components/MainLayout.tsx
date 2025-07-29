@@ -25,7 +25,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
           p: 1,
           mt: 6,
           transition: "margin 0.3s ease",
-          ml: open ? `${drawerWidth}px` : "64px",
+          ml: open ? `${0}px` : "64px",
         }}
       >
         {children}

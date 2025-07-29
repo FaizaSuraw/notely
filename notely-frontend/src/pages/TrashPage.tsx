@@ -54,10 +54,12 @@ const TrashPage = () => {
   const token = useAuthStore((state) => state.token);
   const navigate = useNavigate();
 
+  const api = import.meta.env.VITE_API_URL;
+
   const fetchTrashedNotes = async () => {
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:5000/api/entries/trash", {
+      const res = await fetch(`${api}/api/entries/trash`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -79,7 +81,7 @@ const TrashPage = () => {
 
   const handleRestore = async (id: string, title: string) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/entry/restore/${id}`, {
+      const res = await fetch(`${api}/api/entry/restore/${id}`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -102,7 +104,7 @@ const TrashPage = () => {
   const handlePermanentDelete = async (id: string, title: string) => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/entry/permanent/${id}`,
+        `${api}/api/entry/permanent/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -212,7 +214,7 @@ const TrashPage = () => {
               >
                 <ArrowBack />
               </IconButton>
-              <Typography variant="h4" fontWeight={700} color="grey.800">
+              <Typography variant="h5" fontWeight={700} color="grey.800">
                 🗑️ Trash
               </Typography>
             </Stack>
@@ -319,7 +321,6 @@ const TrashPage = () => {
                     }}
                   >
                     <Stack spacing={2} sx={{ height: "100%" }}>
-                      {/* Header */}
                       <Box>
                         <Typography
                           variant="h6"
@@ -352,8 +353,6 @@ const TrashPage = () => {
                           {note.synopsis}
                         </Typography>
                       </Box>
-
-                      {/* Footer */}
                       <Box sx={{ mt: "auto" }}>
                         <Stack
                           direction="row"
@@ -415,7 +414,6 @@ const TrashPage = () => {
           </Grid>
         )}
 
-        {/* Permanent Delete Confirmation Dialog */}
         <Dialog
           open={deleteDialog.open}
           onClose={closeDeleteDialog}

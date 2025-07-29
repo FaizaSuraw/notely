@@ -5,9 +5,15 @@ import {
   Typography,
   Avatar,
   Box,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  Divider,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Person } from "@mui/icons-material";
+import { Person, Logout, AccountCircle } from "@mui/icons-material";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Header = ({
   open,
@@ -20,6 +26,29 @@ const Header = ({
 }) => {
   const appBarWidth = `calc(100% - ${open ? drawerWidth : 64}px)`;
   const appBarMarginLeft = open ? `${drawerWidth}px` : "64px";
+
+  const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const openMenu = Boolean(anchorEl);
+
+  const handleAvatarClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleProfile = () => {
+    handleClose();
+    navigate("/profile");
+  };
+
+  const handleLogout = () => {
+    handleClose();
+    localStorage.clear(); 
+    navigate("/login");
+  };
 
   return (
     <AppBar
@@ -62,19 +91,60 @@ const Header = ({
           </Typography>
         </Box>
 
-        <Avatar
-          sx={{
-            width: 36,
-            height: 36,
-            bgcolor: "primary.main",
-            cursor: "pointer",
-            "&:hover": {
-              bgcolor: "primary.dark",
-            },
-          }}
-        >
-          <Person sx={{ fontSize: 20 }} />
-        </Avatar>
+        <Box>
+          <IconButton onClick={handleAvatarClick}>
+            <Avatar
+              sx={{
+                width: 36,
+                height: 36,
+                bgcolor: "primary.main",
+                cursor: "pointer",
+                "&:hover": {
+                  bgcolor: "primary.dark",
+                },
+              }}
+            >
+              <Person sx={{ fontSize: 20 }} />
+            </Avatar>
+          </IconButton>
+
+          <Menu
+            anchorEl={anchorEl}
+            open={openMenu}
+            onClose={handleClose}
+            onClick={handleClose}
+            PaperProps={{
+              elevation: 4,
+              sx: {
+                mt: 1.5,
+                minWidth: 160,
+                borderRadius: 2,
+              },
+            }}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+          >
+            <MenuItem onClick={handleProfile}>
+              <ListItemIcon>
+                <AccountCircle fontSize="small" />
+              </ListItemIcon>
+              Profile
+            </MenuItem>
+            <Divider />
+            <MenuItem onClick={handleLogout}>
+              <ListItemIcon>
+                <Logout fontSize="small" />
+              </ListItemIcon>
+              Logout
+            </MenuItem>
+          </Menu>
+        </Box>
       </Toolbar>
     </AppBar>
   );

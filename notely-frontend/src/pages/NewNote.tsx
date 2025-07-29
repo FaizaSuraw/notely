@@ -35,6 +35,8 @@ const NewNote = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  
+  const api = import.meta.env.VITE_API_URL;
 
   const token = useAuthStore((state) => state.token);
   const navigate = useNavigate();
@@ -60,7 +62,7 @@ const NewNote = () => {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/entries", {
+      const res = await fetch(`${api}/api/entries`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -101,8 +103,8 @@ const NewNote = () => {
 
   return (
     <MainLayout>
-      <Container maxWidth="lg" sx={{ py: 3 }}>
-        <Box sx={{ mb: 4 }}>
+      <Container maxWidth="md" sx={{ py: 1 }}>
+        <Box sx={{ mb: 2 }}>
           <Stack
             direction="row"
             alignItems="center"
@@ -120,7 +122,7 @@ const NewNote = () => {
               >
                 <ArrowBack />
               </IconButton>
-              <Typography variant="h4" fontWeight={700} color="grey.800">
+              <Typography variant="h5" fontWeight={600} color="grey.800">
                 📝 Create New Note
               </Typography>
             </Stack>
@@ -139,8 +141,6 @@ const NewNote = () => {
               {formData.isFavorite ? <Star /> : <StarBorder />}
             </IconButton>
           </Stack>
-
-          {/* Alerts */}
           {error && (
             <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }}>
               {error}
@@ -176,8 +176,8 @@ const NewNote = () => {
                   placeholder="Enter your note title..."
                   sx={{
                     "& .MuiOutlinedInput-root": {
-                      fontSize: "1.25rem",
-                      fontWeight: 600,
+                      fontSize: "1rem",
+                      fontWeight: 300,
                       borderRadius: 2,
                     },
                   }}
@@ -190,7 +190,7 @@ const NewNote = () => {
                   onChange={handleChange}
                   fullWidth
                   multiline
-                  rows={2}
+                  rows={1}
                   variant="outlined"
                   disabled={loading}
                   placeholder="Brief description of your note..."
@@ -202,8 +202,6 @@ const NewNote = () => {
                   }}
                 />
 
-                <Divider />
-
                 <TextField
                   label="Content"
                   name="content"
@@ -211,7 +209,7 @@ const NewNote = () => {
                   onChange={handleChange}
                   fullWidth
                   multiline
-                  rows={20}
+                  rows={5}
                   variant="outlined"
                   disabled={loading}
                   placeholder="Start writing your note here... Markdown is supported!"
@@ -219,7 +217,7 @@ const NewNote = () => {
                     "& .MuiOutlinedInput-root": {
                       fontFamily: "monospace",
                       fontSize: "0.95rem",
-                      lineHeight: 1.6,
+                      lineHeight: 1,
                       borderRadius: 2,
                     },
                   }}
@@ -256,8 +254,8 @@ const NewNote = () => {
                     startIcon={<Save />}
                     disabled={loading}
                     sx={{
-                      px: 4,
-                      py: 1.5,
+                      px: 2,
+                      py: 1,
                       fontWeight: 600,
                       borderRadius: 2,
                       boxShadow: "0 4px 12px rgba(0,0,0,0.15)",

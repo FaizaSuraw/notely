@@ -104,17 +104,14 @@ const ViewNote = () => {
     if (!note) return;
 
     try {
-      const res = await fetch(
-        `${api}/api/entry/${id}/favorite`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ isFavorite: !note.isFavorite }),
+      const res = await fetch(`${api}/api/entry/${id}/favorite`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-      );
+        body: JSON.stringify({ isFavorite: !note.isFavorite }),
+      });
 
       if (res.ok) {
         setNote({ ...note, isFavorite: !note.isFavorite });

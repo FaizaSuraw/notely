@@ -1,6 +1,13 @@
 import express from "express";
-import { createNote, getNotes, getNoteById, updateNote, deleteNote, getDeletedNotes } from "../controllers/note.controller";
-import { verifyToken } from "../middleware/verifyToken"
+import {
+  createNote,
+  getNotes,
+  getNoteById,
+  updateNote,
+  deleteNote,
+  getDeletedNotes,
+} from "../controllers/note.controller";
+import { verifyToken } from "../middleware/verifyToken";
 
 const noteRouter = express.Router();
 

@@ -33,6 +33,7 @@ import {
   Email,
   AccountCircle,
   CheckCircle,
+  ArrowBack,
 } from "@mui/icons-material";
 import { useAuthStore } from "../store/authStore";
 
@@ -40,7 +41,6 @@ import { useAuthStore } from "../store/authStore";
 
 const CLOUD_NAME = "diuv0whr0";
 const UPLOAD_PRESET = "notely_upload";
-
 
 interface ProfileData {
   firstName: string;
@@ -83,7 +83,9 @@ const UserProfile = () => {
     severity: "success" as "success" | "error",
   });
   const [hasChanges, setHasChanges] = useState(false);
+
   const api = import.meta.env.VITE_API_URL;
+
   const fetchProfile = async () => {
     setLoading(true);
     try {
@@ -295,9 +297,22 @@ const UserProfile = () => {
                 alignItems="center"
                 mb={2}
               >
-                <Typography variant="h4" fontWeight={800}>
-                  Profile Settings
-                </Typography>
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <IconButton
+                    onClick={() => navigate("/dashboard")}
+                    sx={{
+                      color: "white",
+                      bgcolor: "rgba(255,255,255,0.1)",
+                      "&:hover": { bgcolor: "rgba(255,255,255,0.2)" },
+                    }}
+                  >
+                    <ArrowBack />
+                  </IconButton>
+                  <Typography variant="h4" fontWeight={800}>
+                    Profile Settings
+                  </Typography>
+                </Stack>
+
                 {!isEditing ? (
                   <Button
                     variant="contained"
@@ -355,6 +370,7 @@ const UserProfile = () => {
                   </Stack>
                 )}
               </Stack>
+
               <Typography variant="body1" sx={{ opacity: 0.9 }}>
                 Manage your account settings and profile information
               </Typography>
@@ -388,7 +404,7 @@ const UserProfile = () => {
                     boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
                   }}
                 >
-                  <Person sx={{ fontSize: 60 }} />
+                  {!profile?.avatar && <Person sx={{ fontSize: 60 }} />}
                 </Avatar>
 
                 {isEditing && (

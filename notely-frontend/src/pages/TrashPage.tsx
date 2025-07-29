@@ -103,15 +103,12 @@ const TrashPage = () => {
 
   const handlePermanentDelete = async (id: string, title: string) => {
     try {
-      const res = await fetch(
-        `${api}/api/entry/permanent/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const res = await fetch(`${api}/api/entry/permanent/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
 
       if (res.ok) {
         setSuccess(`"${title}" has been permanently deleted`);

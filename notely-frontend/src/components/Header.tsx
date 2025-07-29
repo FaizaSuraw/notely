@@ -14,6 +14,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { Person, Logout, AccountCircle } from "@mui/icons-material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/authStore";
 
 const Header = ({
   open,
@@ -30,6 +31,7 @@ const Header = ({
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
+  const { user, clearToken } = useAuthStore();
 
   const handleAvatarClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -46,7 +48,7 @@ const Header = ({
 
   const handleLogout = () => {
     handleClose();
-    localStorage.clear(); 
+    clearToken();
     navigate("/login");
   };
 
@@ -94,6 +96,7 @@ const Header = ({
         <Box>
           <IconButton onClick={handleAvatarClick}>
             <Avatar
+              src={user?.avatar || ""}
               sx={{
                 width: 36,
                 height: 36,
@@ -104,7 +107,7 @@ const Header = ({
                 },
               }}
             >
-              <Person sx={{ fontSize: 20 }} />
+              {!user?.avatar && <Person sx={{ fontSize: 20 }} />}
             </Avatar>
           </IconButton>
 

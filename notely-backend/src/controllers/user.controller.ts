@@ -2,7 +2,6 @@ import { Response } from "express";
 import { prisma } from "../../config/prisma.conf";
 import { AuthRequest } from "../middleware/verifyToken";
 
-
 export const getUserProfile = async (req: AuthRequest, res: Response) => {
   const userId = req.user.userID;
 

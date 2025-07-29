@@ -35,7 +35,7 @@ const NewNote = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  
+
   const api = import.meta.env.VITE_API_URL;
 
   const token = useAuthStore((state) => state.token);

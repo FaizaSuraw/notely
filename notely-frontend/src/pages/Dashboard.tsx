@@ -43,7 +43,7 @@ const Dashboard = () => {
   const token = useAuthStore((state) => state.token);
   const navigate = useNavigate();
 
-   const api = import.meta.env.VITE_API_URL;
+  const api = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -87,7 +87,7 @@ const Dashboard = () => {
 
   const handleDeleteNote = async (id: string) => {
     try {
-      const res = await fetch(`${api}/api/entry/${id}`,  {
+      const res = await fetch(`${api}/api/entry/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

@@ -130,7 +130,7 @@ export async function login(req: Request, res: Response) {
       data: error,
     });
   }
-};
+}
 
 export const logout = (_req: Request, res: Response) => {
   res.status(200).json({

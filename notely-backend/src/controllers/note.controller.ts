@@ -92,7 +92,7 @@ export async function getNoteById(req: AuthRequest, res: Response) {
       data: error,
     });
   }
-};
+}
 
 export async function updateNote(req: AuthRequest, res: Response) {
   const userId = req.user.userID;
@@ -133,7 +133,7 @@ export async function updateNote(req: AuthRequest, res: Response) {
       data: error,
     });
   }
-};
+}
 
 export async function deleteNote(req: AuthRequest, res: Response) {
   const userId = req.user.userID;
@@ -170,7 +170,7 @@ export async function deleteNote(req: AuthRequest, res: Response) {
       data: error,
     });
   }
-};
+}
 
 export const getDeletedNotes = async (req: AuthRequest, res: Response) => {
   try {
@@ -181,7 +181,7 @@ export const getDeletedNotes = async (req: AuthRequest, res: Response) => {
         userId,
         isDeleted: true,
       },
-      orderBy: { updatedAt: 'desc' },
+      orderBy: { updatedAt: "desc" },
     });
 
     if (notes.length === 0) {

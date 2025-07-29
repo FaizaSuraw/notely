@@ -14,6 +14,7 @@ interface AuthState {
   user: User | null;
   setToken: (token: string) => void;
   setUser: (user: User) => void;
+  updateAvatar: (avatarUrl: string) => void;
   clearToken: () => void;
   login: (
     id: string,
@@ -34,6 +35,12 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ user });
   },
 
+  updateAvatar: (avatarUrl) => {
+    set((state) => ({
+      user: state.user ? { ...state.user, avatar: avatarUrl } : null,
+    }));
+  },
+
   clearToken: () => {
     localStorage.removeItem("token");
     set({ token: null, user: null });
@@ -52,7 +59,6 @@ export const useAuthStore = create<AuthState>((set) => ({
       });
 
       const data = await res.json();
-      console.log(data);
 
       if (!data.success) {
         return {
